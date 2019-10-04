@@ -1,5 +1,5 @@
 
-const express =  requiere ('express')
+const express =  require ('express')
 const cors =  require("cors")
 var app =  express();
 app.use(cors())
@@ -9,7 +9,7 @@ app.get('/',(req,res)=>{
 app.use("/crud",require('./crud'))
 // app.set('port',  process.env.PORT || 8080);
 port =  8080
-app.liste(port,()=>{
+app.listen(port,()=>{
     console.log("node is running");
     
 } )
