@@ -1,0 +1,11 @@
+{
+    "name": "digitales",
+    "version": "1.0.0",
+    "description": "Proyecto para sistemas digitales",
+    "main": "app.js",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "pg": "^7.12.1"
+    }
+}
