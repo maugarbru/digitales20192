@@ -1,4 +1,4 @@
-const { Client } = requiere('pg')
+const { Client } = require('pg')
 const express = require("express")
 const router = express.Router()
 const connectionString = 'postgres://postgres:postgres@localhost:5432/database'
