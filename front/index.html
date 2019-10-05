@@ -30,7 +30,7 @@
                     </v-toolbar-items>
                 </v-toolbar>
                 <v-container>
-                    <v-card class="mx-auto" max-width="450" tile>
+                    <v-card v-if="!valid" class="mx-auto" max-width="450" tile>
                         <v-card-title>Reportes de consumo</v-card-title>
                         <br>
                         <v-card-text>
@@ -47,15 +47,22 @@
                                 </center>
                                 <br>
                                 <center>
-                                    <v-btn @click="comprobar()">Ver Reporte</v-btn>
-                                    <v-btn @click="limpiarCampos()" outlined>Limpiar</v-btn>
+                                    <v-btn color="red" dark tile @click="comprobar()">Ver Reporte</v-btn>
+                                    <v-btn @click="limpiarCampos()" tile text outlined>Limpiar</v-btn>
                                 </center>
                             </v-form>
                         </v-card-text>
                     </v-card>
                     <br>
-                    <p>{{dia}}</p>
-                    <p>{{mes}}</p>
+                    <v-card v-if="valid" class="mx-auto" max-width="450" tile>
+                        <v-card-title>Consulta</v-card-title>
+                        <br>
+                        <v-card-text>
+                            <p>Máquina: {{maquinaEscogida}}</p>
+                            <p v-if="periodoEscogido == 'Día'">Día escogido: {{dia}}</p>
+                            <p v-if="periodoEscogido == 'Mes'">Mes escogido: {{mes}}</p>
+                        </v-card-text>
+                    </v-card>
                 </v-container>
             </v-content>
         </v-app>
@@ -84,6 +91,7 @@
                     this.periodoEscogido = ""
                     this.maquinaEscogida = ""
                     this.dia = new Date().toISOString().substr(0, 10)
+                    this.mes = new Date().toISOString().substr(0, 7)
                 }
             }
         })
