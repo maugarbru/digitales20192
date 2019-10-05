@@ -1,6 +1,7 @@
 
 const cors =  require("cors")
 var express = require("express")
+var path = require("path")
 var { Client } = require('pg')
 var connectionString = 'postgres://equipo1:digitales123@localhost:5432/equipo1'
 var client = new Client({
@@ -9,8 +10,9 @@ var client = new Client({
 // client.connect();
 var app =  express();
 app.use(cors())
+
 app.get('/',(req,res)=>{
-    res.status(200).send("todo melo")
+    res.sendFile(path.join(__dirname + "/front/index.html"))
 })
 app.get("/datos/", async function (req, res) {
     res.status(200).send({ success: true, message: "Se ha realizado la peticion con exito" })
@@ -20,6 +22,6 @@ app.get("/datos/", async function (req, res) {
 // app.set('port',  process.env.PORT || 8080);
 port =  8080
 app.listen(port,()=>{
-    console.log("node is running");
+    console.log(`Node is running in: http://localhost:${port}`);
     
 } )

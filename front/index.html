@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Equipo 1 | Digitales</title>
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content>
+                <v-toolbar>
+                    <v-toolbar-title>Digitales</v-toolbar-title>
+
+                    <div class="flex-grow-1"></div>
+
+                    <v-toolbar-items v-if="$vuetify.breakpoint.smAndUp">
+                        <v-btn text>Link 1</v-btn>
+                        <v-btn text>Link 2</v-btn>
+                        <v-btn text>Link 3</v-btn>
+                    </v-toolbar-items>
+
+                    <template>
+                        <v-btn icon>
+                            <v-icon>mdi-export-variant</v-icon>
+                        </v-btn>
+                        <v-btn icon>
+                            <v-icon>mdi-delete-circle</v-icon>
+                        </v-btn>
+                        <v-btn icon>
+                            <v-icon>mdi-plus-circle</v-icon>
+                        </v-btn>
+                    </template>
+                </v-toolbar>
+                <v-container>
+                    <h1>{{titulo}}</h1>
+                    <v-card class="mx-auto" max-width="300" tile>
+                        <v-list shaped>
+                            <v-subheader>REPORTES</v-subheader>
+                            <v-list-item-group v-model="item" color="primary">
+                                <v-list-item v-for="(item, i) in items" :key="i">
+                                    <v-list-item-icon>
+                                        <v-icon v-text="item.icon"></v-icon>
+                                    </v-list-item-icon>
+                                    <v-list-item-content>
+                                        <v-list-item-title v-text="item.text"></v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+                    </v-card>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data: {
+                titulo: 'Hola mundo con Vue',
+                item: 1,
+                items: [
+                    { text: 'Coterita', icon: 'mdi-clock' },
+                    { text: 'Maurito', icon: 'mdi-account' },
+                    { text: 'Cracks', icon: 'mdi-flag' },
+                ],
+            }
+        })
+    </script>
+</body>
+
+</html>
