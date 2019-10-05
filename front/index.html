@@ -21,11 +21,11 @@
                     <div class="flex-grow-1"></div>
                     <!-- v-if="$vuetify.breakpoint.smAndUp" -->
                     <v-toolbar-items>
-                        <v-btn icon>
-                            <v-icon>mdi-account-details</v-icon>
-                        </v-btn>
                         <v-btn icon href="http://167.249.40.70/equipo1-nodejs/about">
                             <v-icon>mdi-information-variant</v-icon>
+                        </v-btn>
+                        <v-btn icon>
+                            <v-icon>mdi-account-details</v-icon>
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
@@ -40,9 +40,12 @@
                                 <v-select v-model="periodoEscogido" :items="periodos" label="Período" color="red"
                                     outlined></v-select>
                                 <center v-if="periodoEscogido == 'Día'">
-                                    <v-date-picker v-model="dia" color="red"></v-date-picker>
+                                    <v-date-picker v-model="dia" color="red" locale="es"></v-date-picker>
                                 </center>
-
+                                <center v-if="periodoEscogido == 'Mes'">
+                                    <v-date-picker v-model="mes" color="red" type="month" locale="es"></v-date-picker>
+                                </center>
+                                <br>
                                 <center>
                                     <v-btn @click="comprobar()">Ver Reporte</v-btn>
                                     <v-btn @click="limpiarCampos()" outlined>Limpiar</v-btn>
@@ -50,6 +53,9 @@
                             </v-form>
                         </v-card-text>
                     </v-card>
+                    <br>
+                    <p>{{dia}}</p>
+                    <p>{{mes}}</p>
                 </v-container>
             </v-content>
         </v-app>
@@ -64,6 +70,7 @@
             data: {
                 valid: false,
                 dia: new Date().toISOString().substr(0, 10),
+                mes: new Date().toISOString().substr(0, 7),
                 periodoEscogido: "",
                 maquinaEscogida: "",
                 periodos: ['Día', 'Semana', 'Mes'],
