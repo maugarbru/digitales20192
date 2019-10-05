@@ -14,12 +14,13 @@ app.use(cors())
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname + "/front/index.html"))
 })
+app.get('/about',(req,res)=>{
+    res.sendFile(path.join(__dirname + "/front/about.html"))
+})
 app.get("/datos/", async function (req, res) {
     res.status(200).send({ success: true, message: "Se ha realizado la peticion con exito" })
 
 })
-// app.use("/crud/",require('./crud'))
-// app.set('port',  process.env.PORT || 8080);
 port =  8080
 app.listen(port,()=>{
     console.log(`Node is running in: http://localhost:${port}`);

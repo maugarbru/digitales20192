@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,45 +15,40 @@
     <div id="app">
         <v-app>
             <v-content>
-                <v-toolbar>
-                    <v-toolbar-title>Digitales</v-toolbar-title>
+                <v-toolbar color="red">
+                    <v-toolbar-title class="white--text">Consumo de máquinas</v-toolbar-title>
 
                     <div class="flex-grow-1"></div>
-
-                    <v-toolbar-items v-if="$vuetify.breakpoint.smAndUp">
-                        <v-btn text>Link 1</v-btn>
-                        <v-btn text>Link 2</v-btn>
-                        <v-btn text>Link 3</v-btn>
+                    <!-- v-if="$vuetify.breakpoint.smAndUp" -->
+                    <v-toolbar-items>
+                        <v-btn icon>
+                            <v-icon>mdi-account-details</v-icon>
+                        </v-btn>
+                        <v-btn icon href="path + '/about'">
+                            <v-icon>mdi-information-variant</v-icon>
+                        </v-btn>
                     </v-toolbar-items>
-
-                    <template>
-                        <v-btn icon>
-                            <v-icon>mdi-export-variant</v-icon>
-                        </v-btn>
-                        <v-btn icon>
-                            <v-icon>mdi-delete-circle</v-icon>
-                        </v-btn>
-                        <v-btn icon>
-                            <v-icon>mdi-plus-circle</v-icon>
-                        </v-btn>
-                    </template>
                 </v-toolbar>
                 <v-container>
-                    <h1>{{titulo}}</h1>
-                    <v-card class="mx-auto" max-width="300" tile>
-                        <v-list shaped>
-                            <v-subheader>REPORTES</v-subheader>
-                            <v-list-item-group v-model="item" color="primary">
-                                <v-list-item v-for="(item, i) in items" :key="i">
-                                    <v-list-item-icon>
-                                        <v-icon v-text="item.icon"></v-icon>
-                                    </v-list-item-icon>
-                                    <v-list-item-content>
-                                        <v-list-item-title v-text="item.text"></v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-list-item-group>
-                        </v-list>
+                    <v-card class="mx-auto" max-width="450" tile>
+                        <v-card-title>Reportes de consumo</v-card-title>
+                        <br>
+                        <v-card-text>
+                            <v-form>
+                                <v-select v-model="maquinaEscogida" :items="maquinas" label="Máquina" color="red"
+                                    outlined></v-select>
+                                <v-select v-model="periodoEscogido" :items="periodos" label="Período" color="red"
+                                    outlined></v-select>
+                                <center v-if="periodoEscogido == 'Día'">
+                                    <v-date-picker v-model="dia" color="red"></v-date-picker>
+                                </center>
+
+                                <center>
+                                    <v-btn @click="comprobar()">Ver Reporte</v-btn>
+                                    <v-btn @click="limpiarCampos()" outlined>Limpiar</v-btn>
+                                </center>
+                            </v-form>
+                        </v-card-text>
                     </v-card>
                 </v-container>
             </v-content>
@@ -67,16 +62,31 @@
             el: '#app',
             vuetify: new Vuetify(),
             data: {
-                titulo: 'Hola mundo con Vue',
-                item: 1,
-                items: [
-                    { text: 'Coterita', icon: 'mdi-clock' },
-                    { text: 'Maurito', icon: 'mdi-account' },
-                    { text: 'Cracks', icon: 'mdi-flag' },
-                ],
+                path: 'http://127.0.0.1/~equipo1/',
+                valid: false,
+                dia: new Date().toISOString().substr(0, 10),
+                periodoEscogido: "",
+                maquinaEscogida: "",
+                periodos: ['Día', 'Semana', 'Mes'],
+                maquinas: ['GoFresh', 'Carnets', 'Medicamentos']
+            },
+            methods: {
+                comprobar() {
+                    this.valid = this.periodoEscogido != '' && this.maquinaEscogida != ''
+                },
+                limpiarCampos() {
+                    this.periodoEscogido = ""
+                    this.maquinaEscogida = ""
+                    this.dia = new Date().toISOString().substr(0, 10)
+                }
             }
         })
     </script>
+    <style>
+        #app {
+            font-family: 'Ubuntu', sans-serif;
+        }
+    </style>
 </body>
 
 </html>
