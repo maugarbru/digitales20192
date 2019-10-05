@@ -14,7 +14,7 @@ app.use(cors())
 app.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname + "/front/index.html"))
 })
-app.get('/about',(req,res)=>{
+app.get('/about/',(req,res)=>{
     res.sendFile(path.join(__dirname + "/front/about.html"))
 })
 app.get("/datos/", async function (req, res) {
