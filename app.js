@@ -27,21 +27,25 @@ app.get('/', (req, res) => {
 app.get('/about/', (req, res) => {
     res.sendFile(path.join(__dirname + "/front/about.html"))
 })
+/**
+ * uri con las opciones de traer todos los registros
+ */
 app.get("/datos/", async function (req, res) {
     client.query('SELECT * FROM registros', function (err, result) {
         if (err) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result);
+        res.status(200).send(result.rows);
     });
 });
+/**
+ * uri que tiene la posibilidad de enviar los datos
+ */
 app.post("/insertRegistro", function (req, res) {
     let body =  req.body
     let query =`insert  into  registros (uid_maquina,consumo,hora_inicio,hora_fin)  
     values (${body.uid_maquina},${body.consumo},'${body.hora_inicio}', '${body.hora_fin}')`
-    console.log("query", query);
-    
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
