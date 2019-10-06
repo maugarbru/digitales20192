@@ -51,7 +51,7 @@ app.post("/insertRegistro", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result);
+        res.status(200).send("Se han agregado los datos satisfactoriamente");
     });
 });
 port = 8080
