@@ -7,7 +7,7 @@ var connectionString = 'postgres://equipo1:digitales123@localhost:5432/equipo1'
 var client = new Client({
     connectionString: connectionString
 });
-// client.connect();
+client.connect();
 var app = express();
 app.use(cors())
 
@@ -18,12 +18,12 @@ app.get('/about/', (req, res) => {
     res.sendFile(path.join(__dirname + "/front/about.html"))
 })
 app.get("/datos/", async function (req, res) {
-    client.query('SELECT * FROM pruebas', [1], function (err, result) {
+    client.query('SELECT * FROM prueba', function (err, result) {
         if (err) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result.rows);
+        res.status(200).send(result);
     });
 });
 port = 8080
