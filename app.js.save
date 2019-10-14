@@ -39,9 +39,6 @@ app.get("/datos/", async function (req, res) {
         res.status(200).send(result.rows);
     });
 });
-app.get("/hola",  function (req, res) {
-	res.status(200).send("Hola familia");
-});
 /**
  * uri que tiene la posibilidad de enviar los datos
  */
@@ -57,6 +54,16 @@ app.post("/insertRegistro", function (req, res) {
         res.status(200).send("Se han agregado los datos satisfactoriamente");
     });
 });
+
+/*
+* uri donde se  filtran los registros por rangos de fechas
+*/
+
+app.get('/rangosFechas' function(req,res)){
+	
+}
+
+
 port = 8080
 app.listen(port, () => {
     console.log(`Node is running in: http://localhost:${port}`);
