@@ -66,8 +66,6 @@ app.get("/filtroFecha?", function (req, res) {
     let params = req.query
     let query = `select * from  registros 
     where to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'`
-
-    res.status(200).send(query)
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
@@ -85,8 +83,6 @@ app.get("/filtroDia?", function (req, res) {
     let params = req.query
     let query = `select  * from registros 
 	where  hora_inicio  like '${params.fecha}%'`
-    console.log();
-    res.status(200).send(query)
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
