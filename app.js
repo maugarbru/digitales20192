@@ -65,13 +65,13 @@ app.post("/insertRegistro", function (req, res) {
 app.get("/filtroFecha?", function (req, res) {
     let params = req.query
     let query = `select * from  registros 
-    where to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'`
+    where to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'` 
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result);
+        res.status(200).send(result.rows);
     });
 });
 /**
@@ -88,7 +88,7 @@ app.get("/filtroDia?", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result);
+        res.status(200).send(result.rows);
     });
 });
 
