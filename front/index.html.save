@@ -1,9 +1,9 @@
-'<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Mansalva&display=swap" rel="stylesheet">
+    
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +30,7 @@
                     </v-toolbar-items>
                 </v-toolbar>
                 <v-container>
-                    <v-card class="mx-auto" max-width="450" tile>
+                    <v-card v-if="!valid" class="mx-auto" max-width="450" tile>
                         <v-card-title>Reportes de consumo</v-card-title>
                         <br>
                         <v-card-text>
@@ -40,10 +40,10 @@
                                 <v-select v-model="periodoEscogido" :items="periodos" label="Período" color="red"
                                     outlined></v-select>
                                 <center v-if="periodoEscogido == 'Día'">
-                                    <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
+                                    <v-date-picker v-model="dia" color="red" locale="es"></v-date-picker>
                                 </center>
                                 <center v-if="periodoEscogido == 'Mes'">
-                                    <v-date-picker v-model="mes" color="red" type="month" :max="mesHoy" locale="es"></v-date-picker>
+                                    <v-date-picker v-model="mes" color="red" type="month" locale="es"></v-date-picker>
                                 </center>
                                 <br>
                                 <center>
@@ -54,18 +54,15 @@
                         </v-card-text>
                     </v-card>
                     <br>
-                    <v-dialog v-model="valid" class="mx-auto" max-width="450" tile>
-                        <v-card>
-			<v-card-title>Consulta</v-card-title>
+                    <v-card v-if="valid" class="mx-auto" max-width="450" tile>
+                        <v-card-title>Consulta</v-card-title>
                         <br>
                         <v-card-text>
                             <p>Máquina: {{maquinaEscogida}}</p>
-			    <p>Periodo: {{periodoEscogido}}</p>
                             <p v-if="periodoEscogido == 'Día'">Día escogido: {{dia}}</p>
                             <p v-if="periodoEscogido == 'Mes'">Mes escogido: {{mes}}</p>
                         </v-card-text>
                     </v-card>
-		<v-dialog>
                 </v-container>
             </v-content>
         </v-app>
@@ -79,8 +76,6 @@
             vuetify: new Vuetify(),
             data: {
                 valid: false,
-                diaHoy: new Date().toISOString().substr(0, 10),
-                mesHoy: new Date().toISOString().substr(0, 7),
                 dia: new Date().toISOString().substr(0, 10),
                 mes: new Date().toISOString().substr(0, 7),
                 periodoEscogido: "",
@@ -103,7 +98,7 @@
     </script>
     <style>
         #app {
-            font-family: 'Mansalva', sans-serif;
+            font-family: 'Ubuntu', sans-serif;
         }
     </style>
 </body>
