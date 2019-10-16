@@ -40,10 +40,10 @@
                                 <v-select v-model="periodoEscogido" :items="periodos" label="Período" color="red"
                                     outlined></v-select>
                                 <center v-if="periodoEscogido == 'Día'">
-                                    <v-date-picker v-model="dia" color="red" locale="es"></v-date-picker>
+                                    <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
                                 </center>
                                 <center v-if="periodoEscogido == 'Mes'">
-                                    <v-date-picker v-model="mes" color="red" type="month" locale="es"></v-date-picker>
+                                    <v-date-picker v-model="mes" color="red" type="month" :max="mesHoy" locale="es"></v-date-picker>
                                 </center>
                                 <br>
                                 <center>
@@ -76,6 +76,8 @@
             vuetify: new Vuetify(),
             data: {
                 valid: false,
+                diaHoy: new Date().toISOString().substr(0, 10),
+                mesHoy: new Date().toISOString().substr(0, 7),
                 dia: new Date().toISOString().substr(0, 10),
                 mes: new Date().toISOString().substr(0, 7),
                 periodoEscogido: "",
