@@ -140,7 +140,7 @@
                 },
                 async getDia() {
                     try {
-                       var url = "http://167.249.40.70/equipo1-nodejs/filtroDia?fecha=" + this.dia 
+                       var url = "http://localchost:8080/filtroDia?fecha=" + this.dia 
                         axios.get(url)
                             .then(response=> {
                                 this.datos = response.data;
