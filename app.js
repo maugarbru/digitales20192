@@ -39,9 +39,6 @@ app.get("/datos/", async function (req, res) {
         res.status(200).send(result.rows);
     });
 });
-app.get("/hola",  function (req, res) {
-	res.status(200).send("Hola familia");
-});
 /**
  * uri que tiene la posibilidad de enviar los datos
  */
