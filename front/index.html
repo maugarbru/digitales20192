@@ -1,7 +1,6 @@
-'
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
@@ -140,16 +139,24 @@
                 },
                 async getDia() {
                     try {
-                       var url = "http://172.60.2.149/equipo1-nodejs/filtroDia?fecha=" + this.dia 
-                        axios.get(url)
-                            .then(response=> {
+                        var self =  this
+                        var url = "http://162.249.40.70/equipo1-nodejs/filtroDia?fecha=" + this.dia
+                        axios.get(url, { time: 2000 })
+                            .then(response => {
                                 this.datos = response.data;
                                 this.show = true;
                             }).catch(function (error) {
-                                console.log(error);
+                                let url = "http://172.60.2.149/equipo1-nodejs/filtroDia?fecha=" + self.dia
+                                axios.get(url, { time: 2000 })
+                                    .then(response => {
+                                        self.datos = response.data;
+                                        self.show = true;
+                                    }).catch(function (error) {
+                                        console.log("intente mas tarde");
+                                        
+                                    })
                             })
                     } catch (error) {
-                        console.log(error);
                     }
                 },
 
