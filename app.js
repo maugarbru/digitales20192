@@ -8,7 +8,7 @@ var connectionString = 'postgres://equipo1:digitales123@localhost:5432/equipo1'
 var client = new Client({
     connectionString: connectionString
 });
-client.connect();
+// client.connect();
 var app = express();
 app.use(cors())
 app.use(bodyParser.json({ limit: "50mb" }));
