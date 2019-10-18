@@ -1,177 +1,226 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Equipo 1 | Digitales</title>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css" rel="stylesheet" type="text/css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Equipo 1 | Digitales</title>
 </head>
 
 <body>
-    <div id="app">
-        <v-app>
-            <v-content>
-                <v-toolbar color="red" fixed>
-                    <v-toolbar-title class="white--text">Consumo de máquinas</v-toolbar-title>
+  <div id="app">
+    <v-app>
+      <v-content>
+        <v-toolbar color="red" fixed>
+          <v-toolbar-title class="white--text">Consumo de máquinas</v-toolbar-title>
 
-                    <div class="flex-grow-1"></div>
-                    <!-- v-if="$vuetify.breakpoint.smAndUp" -->
-                    <v-toolbar-items>
-                        <v-btn icon href="equipo1-nodejs/about">
-                            <v-icon>mdi-information-variant</v-icon>
-                        </v-btn>
-                        <v-btn icon>
-                            <v-icon>mdi-account-details</v-icon>
-                        </v-btn>
-                    </v-toolbar-items>
-                </v-toolbar>
-                <v-container>
-                    <v-card class="mx-auto" max-width="450" tile>
-                        <v-card-title>Reportes de consumo</v-card-title>
-                        <br>
-                        <v-card-text>
-                            <v-form>
-                                <v-select v-model="maquinaEscogida" :items="maquinas" label="Máquina" color="red"
-                                    outlined></v-select>
-                                <v-select v-model="periodoEscogido" :items="periodos" label="Período" color="red"
-                                    outlined></v-select>
-                                <center v-if="periodoEscogido == 'Día'">
-                                    <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
-                                </center>
-                                <center v-if="periodoEscogido == 'Semana'">
-                                    <h3>Escoger 2 días</h3>
-                                    <v-date-picker v-model="semana" multiple color="red" locale="es" :max="diaHoy">
-                                    </v-date-picker>
-                                </center>
-                                <center v-if="periodoEscogido == 'Mes'">
-                                    <v-date-picker v-model="mes" color="red" type="month" :max="mesHoy" locale="es">
-                                    </v-date-picker>
-                                </center>
-                                <br>
-                                <center>
-                                    <v-btn color="red" dark tile @click="comprobar()">Ver Reporte</v-btn>
-                                    <v-btn @click="limpiarCampos()" tile text outlined>Limpiar</v-btn>
-                                </center>
-                            </v-form>
-                        </v-card-text>
-                    </v-card>
-                    <br>
-                    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-                        <v-card>
-                            <v-toolbar dark color="red">
-                                <v-btn icon dark @click="dialog = false">
-                                    <v-icon>mdi-close</v-icon>
-                                </v-btn>
-                                <v-toolbar-title>Consulta</v-toolbar-title>
-                                <v-spacer></v-spacer>
-                                <v-toolbar-items>
-                                    <v-btn dark text @click="dialog = false">OK</v-btn>
-                                </v-toolbar-items>
-                            </v-toolbar>
-                            <br>
-                            <v-card-text>
-                                <p>Máquina: {{maquinaEscogida}}</p>
-                                <p>Periodo: {{periodoEscogido}}</p>
-                                <p v-if="periodoEscogido == 'Día'">Día escogido: {{dia}}</p>
-                                <p v-if="periodoEscogido == 'Mes'">Mes escogido: {{mes}}</p>
-                                <p v-if="periodoEscogido == 'Semana'">Semana escogida: {{semana}}</p>
-                                <br />
-                                <v-btn @click="verDatos()">Ver datos</v-btn>
-                                <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1">
-                                </v-data-table>
-                            </v-card-text>
+          <div class="flex-grow-1"></div>
+          <!-- v-if="$vuetify.breakpoint.smAndUp" -->
+          <v-toolbar-items>
+            <v-btn icon href="equipo1-nodejs/about">
+              <v-icon>mdi-information-variant</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon>mdi-account-details</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-container>
+          <v-card class="mx-auto" max-width="450" tile>
+            <v-card-title>Reportes de consumo</v-card-title>
+            <br>
+            <v-card-text>
+              <v-form>
+                <v-select v-model="maquinaEscogida" :items="maquinas" label="Máquina" color="red" outlined></v-select>
+                <v-select v-model="periodoEscogido" :items="periodos" label="Período" color="red" outlined></v-select>
+                <center v-if="periodoEscogido == 'Día'">
+                  <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
+                </center>
+                <center v-if="periodoEscogido == 'Semana'">
+                  <h3>Escoger 2 días</h3>
+                  <v-date-picker v-model="semana" multiple color="red" locale="es" :max="diaHoy">
+                  </v-date-picker>
+                </center>
+                <center v-if="periodoEscogido == 'Mes'">
+                  <v-date-picker v-model="mes" color="red" type="month" :max="mesHoy" locale="es">
+                  </v-date-picker>
+                </center>
+                <br>
+                <center>
+                  <v-btn color="red" dark tile @click="comprobar()">Ver Reporte</v-btn>
+                  <v-btn @click="limpiarCampos()" tile text outlined>Limpiar</v-btn>
+                </center>
+              </v-form>
+            </v-card-text>
+          </v-card>
+          <br>
+          <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card>
+              <v-toolbar dark color="red">
+                <v-btn icon dark @click="dialog = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Consulta</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
+                </v-progress-circular>
+                <v-btn dark text v-if="!loading" @click="dialog = false">OK</v-btn>
+              </v-toolbar>
+              <br>
+              <v-card-text>
+                <p>Máquina: {{maquinaEscogida}}</p>
+                <p v-if="periodoEscogido == 'Día'">Día escogido: {{dia}}</p>
+                <p v-if="periodoEscogido == 'Mes'">Mes escogido: {{mes}}</p>
+                <p v-if="periodoEscogido == 'Semana'">Semana escogida: {{semana}}</p>
 
-                        </v-card>
-                        <v-dialog>
-                </v-container>
-            </v-content>
-        </v-app>
-    </div>
+                <br />
+                  <h3 class="pb-2">Tabla de consumo</h3>
+                  <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
+                    :loading="loading">
+                  </v-data-table>
+                  <h3  class="py-2">Grafica de consumo</h3>
+                  <canvas id="myChart"></canvas>
+              </v-card-text>
+            </v-card>
+            <v-dialog>
+        </v-container>
+      </v-content>
+    </v-app>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-    <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-        const app = new Vue({
-            el: '#app',
-            vuetify: new Vuetify(),
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: {
+        dialog: false,
+        loading: false,
+        show: false,
+        consumos: [],
+        labels: [],
+        diaHoy: moment(new Date()).format("YYYY-MM-DD"),
+        mesHoy: moment(new Date()).format("YYYY-MM"),
+        dia: moment(new Date()).format("YYYY-MM-DD"),
+        mes: moment(new Date()).format("YYYY-MM"),
+        semana: [],
+        datos: [],
+        periodoEscogido: "",
+        maquinaEscogida: "",
+        periodos: ['Día', 'Semana', 'Mes'],
+        maquinas: ['GoFresh', 'Carnets', 'Medicamentos'],
+        headers: [
+          { text: 'Máquina', value: 'uid_maquina' },
+          { text: 'Consumo', value: 'consumo' },
+          { text: 'Hora Inicio', value: 'hora_inicio' },
+          { text: 'Hora Final', value: 'hora_fin' },
+        ],
+      },
+      methods: {
+        graph() {
+          var ctx = document.getElementById('myChart');
+          var myChart = new Chart(ctx, {
+            type: 'line',
             data: {
-                dialog: false,
-                show: false,
-                diaHoy: moment(new Date()).format("YYYY-MM-DD"),
-                mesHoy: moment(new Date()).format("YYYY-MM"),
-                dia: moment(new Date()).format("YYYY-MM-DD"),
-                mes: moment(new Date()).format("YYYY-MM"),
-                semana: [],
-                datos: [],
-                periodoEscogido: "",
-                maquinaEscogida: "",
-                periodos: ['Día', 'Semana', 'Mes'],
-                maquinas: ['GoFresh', 'Carnets', 'Medicamentos'],
-                headers: [
-                    { text: 'Máquina', value: 'uid_maquina' },
-                    { text: 'Consumo', value: 'consumo' },
-                    { text: 'Hora Inicio', value: 'hora_inicio' },
-                    { text: 'Hora Final', value: 'hora_fin' },
-                ],
+              labels: this.labels,
+              datasets: [{
+                label: "Consumos",
+                data: this.consumos,
+                borderWidth: 1,
+                borderColor: "red",
+                fill: false,
+              }]
             },
-            methods: {
-                comprobar() {
-                    if (this.periodoEscogido == '' || this.maquinaEscogida == '') {
-                        alert("Escoger máquina y período")
-                    } else if (this.periodoEscogido == 'Semana' && this.semana.length != 2) {
-                        alert("Escoger 2 días")
-                    } else {
-                        this.dialog = true;
-                        this.getDia();
-                    }
-                },
-                limpiarCampos() {
-                    this.periodoEscogido = ""
-                    this.maquinaEscogida = ""
-                    this.dia = moment(new Date()).format("YYYY-MM-DD")
-                    this.mes = moment(new Date()).format("YYYY-MM")
-                },
-                async getDia() {
-                    try {
-                        var self =  this
-                        var url = "http://162.249.40.70/equipo1-nodejs/filtroDia?fecha=" + this.dia
-                        axios.get(url, { time: 2000 })
-                            .then(response => {
-                                this.datos = response.data;
-                                this.show = true;
-                            }).catch(function (error) {
-                                let url = "http://172.60.2.149/equipo1-nodejs/filtroDia?fecha=" + self.dia
-                                axios.get(url, { time: 2000 })
-                                    .then(response => {
-                                        self.datos = response.data;
-                                        self.show = true;
-                                    }).catch(function (error) {
-                                        console.log("intente mas tarde");
-                                        
-                                    })
-                            })
-                    } catch (error) {
-                    }
-                },
-
-                verDatos() {
-                    console.log(this.datos)
-                    console.log(datos)
-                }
+            options: {
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              }
             }
-        })
-    </script>
-    <style>
-        #app {
-            font-family: 'Ubuntu', sans-serif;
+          });
+        },
+        comprobar() {
+          if (this.periodoEscogido == '' || this.maquinaEscogida == '') {
+            alert("Escoger máquina y período")
+          } else if (this.periodoEscogido == 'Semana' && this.semana.length != 2) {
+            alert("Escoger 2 días")
+          } else {
+            this.dialog = true;
+            this.datos = [];
+            this.getDia();
+          }
+        },
+        limpiarCampos() {
+          this.periodoEscogido = ""
+          this.maquinaEscogida = ""
+          this.dia = moment(new Date()).format("YYYY-MM-DD")
+          this.mes = moment(new Date()).format("YYYY-MM")
+        },
+        /**
+         * trae los datos por dia
+        */
+        async getDia() {
+          try {
+            this.loading = true
+            var self = this
+            var url = "http://167.249.40.70/equipo1-nodejs/filtroDia?fecha=" + this.dia
+            axios.get(url, { timeout: 4000 })
+              .then(response => {
+                this.datos = response.data;
+                this.show = true;
+                self.loading = false;
+                this.getConsumos()
+                this.graph()
+              }).catch(function (error) {
+                console.log(error);
+
+                let url = "http://172.60.2.149/equipo1-nodejs/filtroDia?fecha=" + self.dia
+                axios.get(url, { timeout: 4000 })
+                  .then(response => {
+                    self.datos = response.data;
+                    self.show = true;
+                    self.loading = false;
+                    thi.getConsumos()
+                    self.graph()
+                  }).catch(function (error) {
+                    alert("Error de conexión. Intente más tarde");
+                    self.loading = false;
+                  })
+              })
+          } catch (error) {
+          }
+        },
+        /**
+         * mapea los consumos y las horas finales
+         * */
+        getConsumos() {
+          this.consumos = []
+          this.labels = []
+          this.datos.forEach(element => {
+            this.consumos.push(element.consumo)
+            this.labels.push(element.hora_fin.slice(11, 18))
+          });
         }
-    </style>
+      }
+    })
+  </script>
+  <style>
+    #app {
+      font-family: 'Ubuntu', sans-serif;
+    }
+  </style>
 </body>
 
 </html>

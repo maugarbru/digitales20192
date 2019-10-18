@@ -78,8 +78,11 @@ app.get("/filtroFecha?", function (req, res) {
  */
 app.get("/filtroDia?", function (req, res) {
     let params = req.query
-    let query = `select  * from registros 
-	where  hora_inicio  like '${params.fecha}%'`
+    // let query = `select  * from registros 
+    // where  hora_inicio  like '${params.fecha}%'`
+    let query=`select substring(hora_inicio from 0 for 11), round(avg(consumo),2) from registros
+    where  hora_inicio  like '${params.fecha}%'
+    group by  substring(hora_inicio from 0 for 11)`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
