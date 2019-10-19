@@ -43,7 +43,7 @@
                 </center>
                 <center v-if="periodoEscogido == 'Semana'">
                   <h3>Escoger 2 días</h3>
-                  <v-date-picker v-model="semana" multiple color="red" locale="es" :max="diaHoy">
+                  <v-date-picker v-model="semana" range color="red" locale="es" :max="diaHoy">
                   </v-date-picker>
                 </center>
                 <center v-if="periodoEscogido == 'Mes'">
@@ -79,12 +79,12 @@
                 <p v-if="periodoEscogido == 'Semana'">Semana escogida: {{semana}}</p>
 
                 <br />
-                  <h3 class="pb-2">Tabla de consumo</h3>
-                  <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
-                    :loading="loading">
-                  </v-data-table>
-                  <h3  class="py-2">Grafica de consumo</h3>
-                  <canvas id="myChart"></canvas>
+                <h3 class="pb-2">Tabla de consumo</h3>
+                <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
+                  :loading="loading">
+                </v-data-table>
+                <h3 class="py-2">Grafica de consumo</h3>
+                <canvas id="myChart"></canvas>
               </v-card-text>
             </v-card>
             <v-dialog>
@@ -118,12 +118,7 @@
         maquinaEscogida: "",
         periodos: ['Día', 'Semana', 'Mes'],
         maquinas: ['GoFresh', 'Carnets', 'Medicamentos'],
-        headers: [
-          { text: 'Máquina', value: 'uid_maquina' },
-          { text: 'Consumo', value: 'consumo' },
-          { text: 'Hora Inicio', value: 'hora_inicio' },
-          { text: 'Hora Final', value: 'hora_fin' },
-        ],
+        headers: [],
       },
       methods: {
         graph() {
@@ -159,7 +154,12 @@
           } else {
             this.dialog = true;
             this.datos = [];
-            this.getDia();
+            if (this.periodos[0] == this.periodoEscogido) {
+              this.getDia();
+            } else if (this.periodos[1] == this.periodoEscogido) {
+              this.getSemana()
+            }
+
           }
         },
         limpiarCampos() {
@@ -168,51 +168,78 @@
           this.dia = moment(new Date()).format("YYYY-MM-DD")
           this.mes = moment(new Date()).format("YYYY-MM")
         },
-        /**
-         * trae los datos por dia
-        */
-        async getDia() {
-          try {
-            this.loading = true
-            var self = this
-            var url = "http://167.249.40.70/equipo1-nodejs/filtroDia?fecha=" + this.dia
-            axios.get(url, { timeout: 4000 })
-              .then(response => {
-                this.datos = response.data;
-                this.show = true;
-                self.loading = false;
-                this.getConsumos()
-                this.graph()
-              }).catch(function (error) {
-                console.log(error);
 
-                let url = "http://172.60.2.149/equipo1-nodejs/filtroDia?fecha=" + self.dia
-                axios.get(url, { timeout: 4000 })
-                  .then(response => {
-                    self.datos = response.data;
-                    self.show = true;
-                    self.loading = false;
-                    thi.getConsumos()
-                    self.graph()
-                  }).catch(function (error) {
-                    alert("Error de conexión. Intente más tarde");
-                    self.loading = false;
-                  })
-              })
+        /**
+         * metodo que hace las consultas hacia el servidor
+         */
+        async getAllData(url) {
+          this.loading = true
+          var self = this
+          var response = {}
+          try {
+            url = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.get(url, { timeout: 4000 })
           } catch (error) {
+            try {
+              url = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = axios.get(url, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
           }
+
+          this.datos = response.data;
+          this.show = true;
+          self.loading = false;
+          return response
+
         },
+        /**
+          * trae los datos por dia
+          */
+        async getDia() {
+          var url = "filtroDia?fecha=" + this.dia
+          this.headers = [
+            { text: 'Consumo', value: 'consumo' },
+            { text: 'Hora Inicio', value: 'hora_inicio' },
+            { text: 'Hora Final', value: 'hora_fin' },
+          ]
+          await this.getAllData(url)
+          this.getConsumos()
+          this.getLabels('this.labels.push(element.hora_fin.slice(11, 18))')
+          this.graph()
+        },
+        // metodo que trae los datos por semana
+        async getSemana() {
+          var url = `filtroFecha?fecha_inicio=${this.semana[0]}&fecha_fin=${this.semana[1]}`
+          await this.getAllData(url)
+          this.headers = [
+            { text: 'Dia', value: 'fecha' },
+            { text: 'Consumo', value: 'consumo' },
+          ]
+          this.getConsumos()
+          this.getLabels('this.labels.push(element.fecha)')
+          this.graph()
+        },
+
         /**
          * mapea los consumos y las horas finales
          * */
         getConsumos() {
           this.consumos = []
-          this.labels = []
           this.datos.forEach(element => {
             this.consumos.push(element.consumo)
-            this.labels.push(element.hora_fin.slice(11, 18))
+          });
+        },
+        // metodo que trae las etiquetas dependiendo del tipo de report
+        getLabels(condition) {
+          this.labels = []
+          this.datos.forEach(element => {
+            eval(condition)
           });
         }
+
+
       }
     })
   </script>
