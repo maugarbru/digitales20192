@@ -176,14 +176,14 @@
           this.loading = true
           var self = this
           var response = {}
-          var uri  =""
+          var uri = ""
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.get(url, { timeout: 4000 })
+            response = await axios.get(uri, { timeout: 4000 })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = axios.get(url, { timeout: 4000 })
+              response = await axios.get(uri, { timeout: 4000 })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
@@ -206,9 +206,9 @@
             { text: 'Hora Final', value: 'hora_fin' },
           ]
           await this.getAllData(url)
-          this.getConsumos()
-          this.getLabels('this.labels.push(element.hora_fin.slice(11, 18))')
-          this.graph()
+            this.getConsumos()
+            this.getLabels('this.labels.push(element.hora_fin.slice(11, 18))')
+            this.graph()
         },
         // metodo que trae los datos por semana
         async getSemana() {
