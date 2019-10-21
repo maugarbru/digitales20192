@@ -82,7 +82,7 @@ app.get("/filtroFecha?", function (req, res) {
 app.get("/filtroDia?", function (req, res) {
     let params = req.query
     let query = `select  * from registros 
-    where  hora_inicio  like '${params.fecha}%'`
+    where  hora_inicio  like '${params.fecha}%' order by hora_fin`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
