@@ -65,7 +65,7 @@ app.get("/filtroFecha?", function (req, res) {
     // where to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'` 
     let query = `select substring(hora_inicio from 0 for 11) as fecha, round(avg(consumo),2) as consumo  from registros
     where  to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
-    group by  substring(hora_inicio from 0 for 11)`
+    group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11)`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
