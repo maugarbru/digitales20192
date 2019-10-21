@@ -176,12 +176,13 @@
           this.loading = true
           var self = this
           var response = {}
+          var uri  =""
           try {
-            url = "http://167.249.40.70/equipo1-nodejs/" + url
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
             response = await axios.get(url, { timeout: 4000 })
           } catch (error) {
             try {
-              url = "http://172.60.2.149/equipo1-nodejs/" + url
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
               response = axios.get(url, { timeout: 4000 })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
