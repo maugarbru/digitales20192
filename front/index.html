@@ -159,6 +159,8 @@
               this.getDia();
             } else if (this.periodos[1] == this.periodoEscogido) {
               this.getSemana()
+            }else if(this.periodos[2]==this.periodoEscogido){
+                this.getMes()
             }
 
           }
@@ -224,7 +226,18 @@
           this.getLabels('this.labels.push(element.fecha)')
           this.graph()
         },
-
+        //metodo que trae los datos por mes  
+        async getMes() {
+          var url = `filtroFecha?fecha_inicio=${this.mes}-01&fecha_fin=${this.mes}-30`
+          await this.getAllData(url)
+          this.headers = [
+            { text: 'Dia', value: 'fecha' },
+            { text: 'Consumo', value: 'consumo' },
+          ]
+          this.getConsumos()
+          this.getLabels('this.labels.push(element.fecha)')
+          this.graph()
+        },
         /**
          * mapea los consumos y las horas finales
          * */
