@@ -145,6 +145,7 @@
               }
             }
           });
+          
         },
         comprobar() {
           if (this.periodoEscogido == '' || this.maquinaEscogida == '') {
@@ -212,6 +213,7 @@
         },
         // metodo que trae los datos por semana
         async getSemana() {
+          this.semana.sort()
           var url = `filtroFecha?fecha_inicio=${this.semana[0]}&fecha_fin=${this.semana[1]}`
           await this.getAllData(url)
           this.headers = [
