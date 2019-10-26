@@ -27,6 +27,9 @@ app.get('/', (req, res) => {
 app.get('/about/', (req, res) => {
     res.sendFile(path.join(__dirname + "/front/about.html"))
 })
+app.get('/login/', (req, res) => {
+    res.sendFile(path.join(__dirname + "/front/login.html"))
+})
 /**
  * uri con las opciones de traer todos los registros
  */

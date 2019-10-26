@@ -22,7 +22,7 @@
           <div class="flex-grow-1"></div>
           <!-- v-if="$vuetify.breakpoint.smAndUp" -->
           <v-toolbar-items>
-            <v-btn icon href="equipo1-nodejs/about">
+            <v-btn icon :href="base+'about'">
               <v-icon>mdi-information-variant</v-icon>
             </v-btn>
             <v-btn icon>
@@ -96,6 +96,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
+  <!-- <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
@@ -104,6 +105,8 @@
       vuetify: new Vuetify(),
       data: {
         dialog: false,
+        // base: "/equipo1-nodejs/",  // base de la url en el servidor
+        base: "/", // base de la url localmente
         loading: false,
         show: false,
         consumos: [],
@@ -158,8 +161,8 @@
               this.getDia();
             } else if (this.periodos[1] == this.periodoEscogido) {
               this.getSemana()
-            }else if(this.periodos[2]==this.periodoEscogido){
-                this.getMes()
+            } else if (this.periodos[2] == this.periodoEscogido) {
+              this.getMes()
             }
 
           }
