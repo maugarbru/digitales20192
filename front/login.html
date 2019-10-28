@@ -16,27 +16,90 @@
   <div id="app">
     <v-app>
       <v-content>
+        <v-toolbar color="red" fixed>
+          <v-toolbar-title class="white--text">Máquinas UdeM</v-toolbar-title>
+
+          <div class="flex-grow-1"></div>
+          <!-- v-if="$vuetify.breakpoint.smAndUp" -->
+          <v-toolbar-items>
+            <v-btn href="/equipo1-nodejs/" depressed text>
+              <v-icon>mdi-arrow-left</v-icon>
+              Volver
+            </v-btn>
+            <v-btn icon :href="base+'about'">
+              <v-icon>mdi-information-variant</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
         <v-container>
-          <v-layout align-center justify-center>
+          <v-layout align-center justify-center v-if="!logged">
             <v-card width="400">
               <v-card-title>
                 <v-spacer></v-spacer>
-                Maquinas UdeM
+                Gestionar máquinas
                 <v-spacer></v-spacer>
               </v-card-title>
               <v-card-text>
-                <v-text-field label="Usuario"></v-text-field>
-                <v-text-field label="Contraseña"></v-text-field>
+                <v-text-field label="Usuario" v-model="username"></v-text-field>
+                <v-text-field label="Contraseña" type="password" v-model="password"></v-text-field>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn dark color="red">
+                <v-btn dark color="red" @click="login()" :loading="loading">
                   Ingresar
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-layout>
+          <v-container v-if="logged">
+            <v-card>
+              <v-container>
+                <v-toolbar color="white" fixed flat>
+                  <v-toolbar-title>Gestionar máquinas</v-toolbar-title>
+
+                  <div class="flex-grow-1"></div>
+                  <!-- v-if="$vuetify.breakpoint.smAndUp" -->
+                  <v-btn outlined @click="dialog = true">
+                    Añadir máquina
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+
+                </v-toolbar>
+                <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
+                  :loading="loading">
+                </v-data-table>
+              </v-container>
+
+            </v-card>
+            <v-dialog v-model="dialog" max-width="600" persistent transition="dialog-bottom-transition">
+              <v-card>
+                <v-toolbar dark color="red">
+                  <v-btn icon dark @click="dialog = false">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                  <v-toolbar-title>Nuevo registro de máquina</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
+                  </v-progress-circular>
+                </v-toolbar>
+                <br>
+                <v-card-text>
+                  <v-text-field label="Código" type="text" v-model="maquina.code"></v-text-field>
+                  <v-text-field label="Nombre" type="text" v-model="maquina.name"></v-text-field>
+                  <v-text-field label="Ubicación" type="text" v-model="maquina.location"></v-text-field>
+                  <v-textarea label="Descripción" type="text" v-model="maquina.description"></v-textarea>
+                  {{maquina}}
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red" dark>
+                    <v-icon left dark>mdi-plus</v-icon>Guardar
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+              <v-dialog>
+          </v-container>
         </v-container>
       </v-content>
     </v-app>
@@ -50,11 +113,35 @@
       el: '#app',
       vuetify: new Vuetify(),
       data: {
+        base: "/",
+        dialog: false,
+        username: "",
+        password: "",
+        logged: false,
+        loading: false,
+        maquina: {},
+        headers: [
+          { text: 'ID', value: 'id' },
+          { text: 'Código', value: 'code' },
+          { text: 'Nombre', value: 'name' },
+          { text: 'Ubicación', value: 'location', sorteable: false },
+          { text: 'Descripción', value: 'description', sorteable: false },
+          { text: 'Acciones', value: 'action', sorteable: false },
+        ],
+        datos: [],
       },
       methods: {
         //   metodo de login
         login() {
-
+          this.loading = true
+          if (this.username == 'admin' && this.password == 'admin') {
+            this.logged = true
+            this.loading = false
+          } else {
+            this.logged = false
+            alert('Acceso denegado')
+            this.loading = false
+          }
         }
       }
     })

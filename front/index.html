@@ -25,7 +25,7 @@
             <v-btn icon :href="base+'about'">
               <v-icon>mdi-information-variant</v-icon>
             </v-btn>
-            <v-btn icon>
+            <v-btn icon :href="base+'login'">
               <v-icon>mdi-account-details</v-icon>
             </v-btn>
           </v-toolbar-items>
@@ -37,11 +37,11 @@
             <v-card-text>
               <v-form>
                 <v-select v-model="maquinaEscogida" :items="maquinas" label="Máquina" color="red" outlined></v-select>
-                <v-select v-model="periodoEscogido" :items="periodos" label="Período" color="red" outlined></v-select>
+                <v-select v-model="periodoEscogido" :items="periodos" label="Tiempo" color="red" outlined></v-select>
                 <center v-if="periodoEscogido == 'Día'">
                   <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
                 </center>
-                <center v-if="periodoEscogido == 'Semana'">
+                <center v-if="periodoEscogido == 'Período'">
                   <h3>Escoger 2 días</h3>
                   <v-date-picker v-model="semana" range color="red" locale="es" :max="diaHoy">
                   </v-date-picker>
@@ -76,7 +76,7 @@
                 <p>Máquina: {{maquinaEscogida}}</p>
                 <p v-if="periodoEscogido == 'Día'">Día escogido: {{dia}}</p>
                 <p v-if="periodoEscogido == 'Mes'">Mes escogido: {{mes}}</p>
-                <p v-if="periodoEscogido == 'Semana'">Semana escogida: {{semana}}</p>
+                <p v-if="periodoEscogido == 'Semana'">Periodo escogido: {{semana}}</p>
 
                 <br />
                 <h3 class="pb-2">Tabla de consumo</h3>
@@ -119,7 +119,7 @@
         datos: [],
         periodoEscogido: "",
         maquinaEscogida: "",
-        periodos: ['Día', 'Semana', 'Mes'],
+        periodos: ['Día', 'Período', 'Mes'],
         maquinas: ['GoFresh', 'Carnets', 'Medicamentos'],
         headers: [],
       },
@@ -152,8 +152,8 @@
         },
         comprobar() {
           if (this.periodoEscogido == '' || this.maquinaEscogida == '') {
-            alert("Escoger máquina y período")
-          } else if (this.periodoEscogido == 'Semana' && this.semana.length != 2) {
+            alert("Escoger máquina y tiempo")
+          } else if (this.periodoEscogido == 'Período' && this.semana.length != 2) {
             alert("Escoger 2 días")
           } else {
             this.dialog = true;
