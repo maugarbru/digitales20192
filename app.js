@@ -161,7 +161,7 @@ app.delete("/maquinas", function (req, res) {
  */
 app.get("/loginUser", function (req, res) {
     let params = req.query
-    let query = `select nombre from usuarios where id = '${params.id}' and password = '${params.password}`
+    let query = `select nombre from usuarios where id = '${params.id}' and password = '${params.password}'`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
