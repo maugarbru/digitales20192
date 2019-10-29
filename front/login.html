@@ -172,6 +172,7 @@
         username: "",
         password: "",
         logged: false,
+        auth: false,
         loading: false,
         editing: false,
         maquina: {},
@@ -189,7 +190,7 @@
         //   metodo de login
         login() {
           this.loading = true
-          if (this.getUser()) {
+          if (this.auth) {
             this.logged = true
             this.getMaquinas()
           } else {
@@ -336,9 +337,9 @@
           var url = 'loginUser?id=' + this.username + "&password=" + this.password
           await this.getAllData(url)
           if (this.datos.length > 0) {
-            return true
+            this.auth = true
           } else {
-            return false
+            this.auth = false
           }
         }
       }

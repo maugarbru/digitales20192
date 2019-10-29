@@ -167,6 +167,7 @@ app.get("/loginUser", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
+        console.log(result);
         res.status(200).send(result.rows);
     });
 });
