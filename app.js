@@ -67,8 +67,8 @@ app.get("/filtroFecha?", function (req, res) {
     // let query = `select * from  registros 
     // where to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'` 
     let query = `select substring(hora_inicio from 0 for 11) as fecha, round(sum(consumo),2) as consumo  from registros
-    where  to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
-    group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11) and uid_maquina = ${params.uid}`
+    where uid_maquina = ${params.uid} and to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
+    group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11)`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
@@ -85,7 +85,7 @@ app.get("/filtroFecha?", function (req, res) {
 app.get("/filtroDia?", function (req, res) {
     let params = req.query
     let query = `select  * from registros 
-    where  hora_inicio  like '${params.fecha}%' order by hora_fin and uid_maquina = ${params.uid}`
+    where uid_maquina = ${params.uid} and hora_inicio like '${params.fecha}%' order by hora_fin`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
