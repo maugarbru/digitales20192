@@ -33,6 +33,7 @@
         </v-toolbar>
         <v-container>
           <v-layout align-center justify-center v-if="!logged">
+            <v-progress-linear v-if="loading" value="25"></v-progress-linear>
             <v-card width="400">
               <v-card-title>
                 <v-spacer></v-spacer>
@@ -60,7 +61,7 @@
 
                   <div class="flex-grow-1"></div>
                   <!-- v-if="$vuetify.breakpoint.smAndUp" -->
-                  <v-btn outlined @click="dialog = true">
+                  <v-btn outlined @click="dialog = true; editing = false">
                     Añadir máquina
                     <v-icon>mdi-plus</v-icon>
                   </v-btn>
@@ -68,37 +69,81 @@
                 </v-toolbar>
                 <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
                   :loading="loading">
+                  <template v-slot:item.action="{ item }">
+                    <v-btn icon @click="editMaquina(item)">
+                      <v-icon color="orange">mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn icon @click="deleteMaquina(item)">
+                      <v-icon color="red">mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
                 </v-data-table>
               </v-container>
-
             </v-card>
-            <v-dialog v-model="dialog" max-width="600" persistent transition="dialog-bottom-transition">
+
+            <v-dialog v-model="dialog" max-width="600" transition="dialog-bottom-transition">
               <v-card>
                 <v-toolbar dark color="red">
-                  <v-btn icon dark @click="dialog = false">
+                  <v-btn icon dark @click="dialog = false; maquina = {}; color = 'red'">
                     <v-icon>mdi-close</v-icon>
                   </v-btn>
-                  <v-toolbar-title>Nuevo registro de máquina</v-toolbar-title>
+                  <v-toolbar-title v-if="!editing">Nuevo registro de máquina</v-toolbar-title>
+                  <v-toolbar-title v-else>Editar registro de máquina</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
                   </v-progress-circular>
                 </v-toolbar>
                 <br>
                 <v-card-text>
-                  <v-text-field label="Código" type="text" v-model="maquina.code"></v-text-field>
-                  <v-text-field label="Nombre" type="text" v-model="maquina.name"></v-text-field>
-                  <v-text-field label="Ubicación" type="text" v-model="maquina.location"></v-text-field>
-                  <v-textarea label="Descripción" type="text" v-model="maquina.description"></v-textarea>
-                  {{maquina}}
+                  <v-text-field label="Código" type="text" v-model="maquina.codigo"></v-text-field>
+                  <v-text-field label="Nombre" type="text" v-model="maquina.nombre"></v-text-field>
+                  <v-text-field label="Ubicación" type="text" v-model="maquina.ubicacion"></v-text-field>
+                  <v-textarea label="Descripción" type="text" v-model="maquina.descripcion"></v-textarea>
                 </v-card-text>
                 <v-card-actions>
+                  <v-btn outlined small @click="dialog = false; maquina = {}; color = 'red'">
+                    <v-icon left small>mdi-cancel</v-icon>Cancelar
+                  </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn color="red" dark>
+                  <v-btn color="green" dark v-if="!editing">
                     <v-icon left dark>mdi-plus</v-icon>Guardar
+                  </v-btn>
+                  <v-btn color="orange" dark v-else>
+                    <v-icon left dark>mdi-check</v-icon>Editar
                   </v-btn>
                 </v-card-actions>
               </v-card>
-              <v-dialog>
+            </v-dialog>
+
+            <v-dialog v-model="dialogDelete" max-width="400" persistent transition="dialog-bottom-transition">
+              <v-card>
+                <v-toolbar dark color="red">
+                  <v-btn icon dark @click="dialogDelete = false; maquina = {}">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                  <v-toolbar-title>Confirmar eliminación</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
+                  </v-progress-circular>
+                </v-toolbar>
+                <br>
+                <v-card-text>
+                  <h3>Código: {{maquina.codigo}}</h3>
+                  <h3>Nombre: {{maquina.nombre}}</h3>
+                  <h3>Ubicación: {{maquina.ubicacion}}</h3>
+                  <h3>Descripción: {{maquina.descripcion}}</h3>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn outlined small @click="dialogDelete = false; maquina = {}">
+                    <v-icon left small>mdi-cancel</v-icon>Cancelar
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red" dark>
+                    <v-icon left dark>mdi-delete</v-icon>Eliminar
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-container>
         </v-container>
       </v-content>
@@ -115,17 +160,19 @@
       data: {
         base: "/",
         dialog: false,
+        dialogDelete: false,
         username: "",
         password: "",
         logged: false,
         loading: false,
+        editing: false,
         maquina: {},
         headers: [
-          { text: 'ID', value: 'id' },
-          { text: 'Código', value: 'code' },
-          { text: 'Nombre', value: 'name' },
-          { text: 'Ubicación', value: 'location', sorteable: false },
-          { text: 'Descripción', value: 'description', sorteable: false },
+          { text: 'ID', value: 'uid' },
+          { text: 'Código', value: 'codigo' },
+          { text: 'Nombre', value: 'nombre' },
+          { text: 'Ubicación', value: 'ubicacion', sorteable: false },
+          { text: 'Descripción', value: 'descripcion', sorteable: false },
           { text: 'Acciones', value: 'action', sorteable: false },
         ],
         datos: [],
@@ -137,12 +184,26 @@
           if (this.username == 'admin' && this.password == 'admin') {
             this.logged = true
             this.getMaquinas()
-            this.loading = false
           } else {
             this.logged = false
             alert('Acceso denegado')
             this.loading = false
           }
+        },
+
+        editMaquina(item) {
+          console.log("Edit", item);
+          this.dialog = true
+          this.color = 'orange'
+          this.maquina = item
+          this.editing = true
+        },
+
+        deleteMaquina(item) {
+          console.log("Delete", item);
+          this.color = 'red'
+          this.maquina = item
+          this.dialogDelete = true
         },
 
         /**
