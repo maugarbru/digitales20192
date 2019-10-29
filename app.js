@@ -120,7 +120,7 @@ app.post("/maquinas", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result.rows);
+        res.status(200).send("Se ha agregado la maquina correctamente");
     });
 });
 
@@ -135,7 +135,7 @@ app.put("/maquinas", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result.rows);
+        res.status(200).send("Se ha actualizado la maquina correctamente");
     });
 });
 
@@ -150,7 +150,7 @@ app.delete("/maquinas", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result.rows);
+        res.status(200).send("Se ha eliminado la maquina correctamente");
     });
 });
 
