@@ -114,9 +114,8 @@ app.get("/maquinas", function (req, res) {
  */
 app.post("/maquinas", function (req, res) {
     let body = req.body
-    console.log(body);
-    
-    let query = `insert into maquinas (codigo, nombre, ubicacion, descripcion) values ('${body.codigo}', '${body.nombre}', '${body.ubicacion}', '${body.descripcion}'`
+    let query = `insert into maquinas (codigo, nombre, ubicacion, descripcion) values ('${body.codigo}', '${body.nombre}', '${body.ubicacion}', '${body.descripcion}')`
+    console.log(query);
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
@@ -131,9 +130,8 @@ app.post("/maquinas", function (req, res) {
  */
 app.put("/maquinas", function (req, res) {
     let body = req.body
-    console.log(body);
-    
     let query = `update maquinas set codigo = '${body.codigo}', nombre = '${body.nombre}', ubicacion = '${body.ubicacion}', descripcion = '${body.descripcion}' where uid = ${body.uid}`
+    console.log(query);
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
