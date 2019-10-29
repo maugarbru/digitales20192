@@ -188,7 +188,8 @@
       },
       methods: {
         //   metodo de login
-        login() {
+        async login() {
+          await this.getUser()
           this.loading = true
           if (this.auth) {
             this.logged = true
