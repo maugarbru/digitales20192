@@ -95,6 +95,20 @@ app.get("/filtroDia?", function (req, res) {
     });
 });
 
+/**
+ * query para obtener las maquinas
+ */
+app.get("/maquinas", function (req, res) {
+    let query = `select  * from maquinas`
+    client.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        res.status(200).send(result.rows);
+    });
+});
+
 
 port = 8080
 app.listen(port, () => {
