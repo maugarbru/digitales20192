@@ -133,7 +133,7 @@ app.put("/maquinas", function (req, res) {
     let body = req.body
     console.log(body);
     
-    let query = `update maquinas set codigo = ${body.codigo}, nombre = ${body.nombre}, ubicacion = ${body.ubicacion}, descripcion = ${body.descripcion} where uid = ${body.uid}`
+    let query = `update maquinas set codigo = '${body.codigo}', nombre = '${body.nombre}', ubicacion = '${body.ubicacion}', descripcion = '${body.descripcion}' where uid = ${body.uid}`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
