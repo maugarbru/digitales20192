@@ -145,6 +145,11 @@
               </v-card>
             </v-dialog>
           </v-container>
+          <v-snackbar v-model="snackbar" :timeout="3500" :color="snackcolor">
+            <center>
+              <strong>{{ snackbartext }}</strong>
+            </center>
+          </v-snackbar>
         </v-container>
       </v-content>
     </v-app>
@@ -161,6 +166,9 @@
         base: "/",
         dialog: false,
         dialogDelete: false,
+        snackbar: false,
+        snackbartext: '',
+        snackcolor: '',
         username: "",
         password: "",
         logged: false,
@@ -181,7 +189,7 @@
         //   metodo de login
         login() {
           this.loading = true
-          if (this.username == 'admin' && this.password == 'admin') {
+          if (this.getUser()) {
             this.logged = true
             this.getMaquinas()
           } else {
@@ -232,6 +240,14 @@
               alert("Error de conexión. Intente más tarde");
             }
           }
+          if (response) {
+            this.snackbar = true
+            this.snackbartext = 'Máquina añadida correctamente!'
+            this.dialog = false
+            this.maquina = {}
+            this.snackcolor = 'green'
+            this.getMaquinas()
+          }
           this.loading = false
         },
 
@@ -249,6 +265,15 @@
               alert("Error de conexión. Intente más tarde");
             }
           }
+          if (response) {
+            this.snackbar = true
+            this.snackbartext = 'Máquina editada correctamente!'
+            this.dialog = false
+            this.maquina = {}
+            this.editing = false
+            this.snackcolor = 'orange'
+            this.getMaquinas()
+          }
           this.loading = false
         },
 
@@ -265,6 +290,14 @@
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
+          }
+          if (response) {
+            this.snackbar = true
+            this.snackbartext = 'Máquina eliminada correctamente!'
+            this.dialogDelete = false
+            this.maquina = {}
+            this.snackcolor = 'red'
+            this.getMaquinas()
           }
           this.loading = false
         },
@@ -297,6 +330,16 @@
         async getMaquinas() {
           var url = 'maquinas'
           await this.getAllData(url)
+        },
+
+        async getUser() {
+          var url = 'login?id=' + this.username + "&password=" + this.password
+          await this.getAllData(url)
+          if (this.datos.length > 0) {
+            return true
+          } else {
+            return false
+          }
         }
       }
     })

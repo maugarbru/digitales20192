@@ -36,7 +36,7 @@
             <br>
             <v-card-text>
               <v-form>
-                <v-select v-model="maquinaEscogida" :items="maquinas" label="Máquina" color="red" outlined></v-select>
+                <v-select v-model="maquinaEscogida" :items="maquinasNombres" label="Máquina" color="red" outlined></v-select>
                 <v-select v-model="periodoEscogido" :items="periodos" label="Tiempo" color="red" outlined></v-select>
                 <center v-if="periodoEscogido == 'Día'">
                   <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
@@ -103,6 +103,9 @@
     const app = new Vue({
       el: '#app',
       vuetify: new Vuetify(),
+      beforeMount() {
+        this.getMaquinas()
+      },
       data: {
         dialog: false,
         base: "/equipo1-nodejs/",  // base de la url en el servidor
@@ -120,7 +123,8 @@
         periodoEscogido: "",
         maquinaEscogida: "",
         periodos: ['Día', 'Período', 'Mes'],
-        maquinas: ['GoFresh', 'Carnets', 'Medicamentos'],
+        maquinas: [],
+        maquinasNombres: [],
         headers: [],
       },
       methods: {
@@ -174,6 +178,15 @@
           this.dia = moment(new Date()).format("YYYY-MM-DD")
           this.mes = moment(new Date()).format("YYYY-MM")
         },
+        getMaquina() {
+          var uid = undefined
+          this.maquinas.forEach(element => {
+            if (element.nombre == this.maquinaEscogida) {
+              uid = element.uid
+            }
+          });
+          return uid
+        },
 
         /**
          * metodo que hace las consultas hacia el servidor
@@ -205,7 +218,10 @@
           * trae los datos por dia
           */
         async getDia() {
-          var url = "filtroDia?fecha=" + this.dia
+          var uid_maquina = this.getMaquina()
+          console.log(uid_maquina);
+          
+          var url = "filtroDia?fecha=" + this.dia + "&uid=" + uid_maquina
           this.headers = [
             { text: 'Consumo', value: 'consumo' },
             { text: 'Hora Inicio', value: 'hora_inicio' },
@@ -216,10 +232,12 @@
           this.getLabels('this.labels.push(element.hora_fin.slice(11, 18))')
           this.graph()
         },
+
         // metodo que trae los datos por semana
         async getSemana() {
           this.semana.sort()
-          var url = `filtroFecha?fecha_inicio=${this.semana[0]}&fecha_fin=${this.semana[1]}`
+          var uid_maquina = this.getMaquina()
+          var url = `filtroFecha?fecha_inicio=${this.semana[0]}&fecha_fin=${this.semana[1]}&uid=${uid_maquina}`
           await this.getAllData(url)
           this.headers = [
             { text: 'Dia', value: 'fecha' },
@@ -229,9 +247,11 @@
           this.getLabels('this.labels.push(element.fecha)')
           this.graph()
         },
+
         //metodo que trae los datos por mes  
         async getMes() {
-          var url = `filtroFecha?fecha_inicio=${this.mes}-01&fecha_fin=${this.mes}-30`
+          var uid_maquina = this.getMaquina()
+          var url = `filtroFecha?fecha_inicio=${this.mes}-01&fecha_fin=${this.mes}-30&uid=${uid_maquina}`
           await this.getAllData(url)
           this.headers = [
             { text: 'Dia', value: 'fecha' },
@@ -241,6 +261,7 @@
           this.getLabels('this.labels.push(element.fecha)')
           this.graph()
         },
+
         /**
          * mapea los consumos y las horas finales
          * */
@@ -256,9 +277,17 @@
           this.datos.forEach(element => {
             eval(condition)
           });
+        },
+
+        async getMaquinas() {
+          var url = 'maquinas'
+          await this.getAllData(url)
+          this.datos.forEach(element => {
+            this.maquinas.push(element)
+            this.maquinasNombres.push(element.nombre)
+          });
+          this.datos = []
         }
-
-
       }
     })
   </script>

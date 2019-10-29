@@ -68,7 +68,7 @@ app.get("/filtroFecha?", function (req, res) {
     // where to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'` 
     let query = `select substring(hora_inicio from 0 for 11) as fecha, round(sum(consumo),2) as consumo  from registros
     where  to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
-    group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11)`
+    group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11) and uid_maquina = ${params.uid}`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
@@ -85,7 +85,7 @@ app.get("/filtroFecha?", function (req, res) {
 app.get("/filtroDia?", function (req, res) {
     let params = req.query
     let query = `select  * from registros 
-    where  hora_inicio  like '${params.fecha}%' order by hora_fin`
+    where  hora_inicio  like '${params.fecha}%' order by hora_fin and uid_maquina = ${params.uid}`
     client.query(query, function (err, result) {
         if (err) {
             console.log(err);
@@ -153,6 +153,21 @@ app.delete("/maquinas", function (req, res) {
             res.status(400).send(err);
         }
         res.status(200).send("Se ha eliminado la maquina correctamente");
+    });
+});
+
+/**
+ * query para obtener las maquinas
+ */
+app.get("/login", function (req, res) {
+    let params = req.query
+    let query = `select nombre from usuarios where id = '${params.id}' and password = '${params.password}`
+    client.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        res.status(200).send(result.rows);
     });
 });
 
