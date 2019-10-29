@@ -70,10 +70,10 @@
                 <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
                   :loading="loading">
                   <template v-slot:item.action="{ item }">
-                    <v-btn icon @click="editMaquina(item)">
+                    <v-btn icon @click="editDialog(item)">
                       <v-icon color="orange">mdi-pencil</v-icon>
                     </v-btn>
-                    <v-btn icon @click="deleteMaquina(item)">
+                    <v-btn icon @click="deleteDialog(item)">
                       <v-icon color="red">mdi-delete</v-icon>
                     </v-btn>
                   </template>
@@ -105,10 +105,10 @@
                     <v-icon left small>mdi-cancel</v-icon>Cancelar
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn color="green" dark v-if="!editing">
+                  <v-btn color="green" dark v-if="!editing" @click="verificar()">
                     <v-icon left dark>mdi-plus</v-icon>Guardar
                   </v-btn>
-                  <v-btn color="orange" dark v-else>
+                  <v-btn color="orange" dark v-else @click="verificar()">
                     <v-icon left dark>mdi-check</v-icon>Editar
                   </v-btn>
                 </v-card-actions>
@@ -138,7 +138,7 @@
                     <v-icon left small>mdi-cancel</v-icon>Cancelar
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn color="red" dark>
+                  <v-btn color="red" dark @click="deleteMaquina(maquina)">
                     <v-icon left dark>mdi-delete</v-icon>Eliminar
                   </v-btn>
                 </v-card-actions>
@@ -191,7 +191,7 @@
           }
         },
 
-        editMaquina(item) {
+        editDialog(item) {
           console.log("Edit", item);
           this.dialog = true
           this.color = 'orange'
@@ -199,11 +199,74 @@
           this.editing = true
         },
 
-        deleteMaquina(item) {
+        deleteDialog(item) {
           console.log("Delete", item);
           this.color = 'red'
           this.maquina = item
           this.dialogDelete = true
+        },
+
+        verificar() {
+          if (this.maquina.codigo == '' || this.maquina.codigo == null || this.maquina.nombre == '' || this.maquina.nombre == null) {
+            alert('El código y el nombre de la máquina es obligatorio')
+          } else {
+            if (this.editing) {
+              this.editMaquina(this.maquina)
+            } else {
+              this.saveMaquina(this.maquina)
+            }
+          }
+        },
+
+        async saveMaquina(maquina) {
+          this.loading = true
+          var url = 'maquinas'
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.post(uri, maquina, { timeout: 4000 })
+          } catch (error) {
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = await axios.post(uri, maquina, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
+          this.loading = false
+        },
+
+        async editMaquina(maquina) {
+          this.loading = true
+          var url = 'maquinas'
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.put(uri, maquina, { timeout: 4000 })
+          } catch (error) {
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = await axios.put(uri, maquina, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
+          this.loading = false
+        },
+
+        async deleteMaquina(maquina) {
+          this.loading = true
+          var url = 'maquinas?uid=' + maquina.uid
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.delete(uri, { timeout: 4000 })
+          } catch (error) {
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = await axios.delete(uri, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
+          this.loading = false
         },
 
         /**

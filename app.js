@@ -109,6 +109,51 @@ app.get("/maquinas", function (req, res) {
     });
 });
 
+/**
+ * query para insert las maquinas
+ */
+app.post("/maquinas", function (req, res) {
+    let body = req.body
+    let query = `insert into maquinas (codigo, nombre, ubicacion, descripcion) values ('${body.codigo}', '${body.nombre}', '${body.ubicacion}', '${body.descripcion}'`
+    client.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        res.status(200).send(result.rows);
+    });
+});
+
+/**
+ * query para update las maquinas
+ */
+app.put("/maquinas", function (req, res) {
+    let body = req.body
+    let query = `update maquinas set codigo = ${body.codigo}, nombre = ${body.nombre}, ubicacion = ${body.ubicacion}, descripcion = ${body.descripcion} where uid = ${body.uid}`
+    client.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        res.status(200).send(result.rows);
+    });
+});
+
+/**
+ * query para delete las maquinas
+ */
+app.delete("/maquinas", function (req, res) {
+    let params = req.query
+    let query = `delete from maquinas where uid = ${params.uid} `
+    client.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        res.status(200).send(result.rows);
+    });
+});
+
 
 port = 8080
 app.listen(port, () => {
