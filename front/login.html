@@ -142,6 +142,36 @@
             alert('Acceso denegado')
             this.loading = false
           }
+        },
+
+        /**
+         * metodo que hace las consultas hacia el servidor
+         */
+        async getAllData(url) {
+          this.loading = true
+          var self = this
+          var response = {}
+          var uri = ""
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.get(uri, { timeout: 4000 })
+          } catch (error) {
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = await axios.get(uri, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
+          this.datos = response.data;
+          this.show = true;
+          self.loading = false;
+          return response
+        },
+
+        getMaquinas() {
+          var url = 'maquinas'
+          this.getAllData(url)
         }
       }
     })
