@@ -31,13 +31,13 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
+        <v-progress-linear v-if="loading" value="25"></v-progress-linear>
         <v-container>
           <v-layout align-center justify-center v-if="!logged">
-            <v-progress-linear v-if="loading" value="25"></v-progress-linear>
             <v-card width="400">
               <v-card-title>
                 <v-spacer></v-spacer>
-                Gestionar máquinas
+                Gestionar máquinas - Usuario: {{user}}
                 <v-spacer></v-spacer>
               </v-card-title>
               <v-card-text>
@@ -173,6 +173,7 @@
         password: "",
         logged: false,
         auth: false,
+        user: '',
         loading: false,
         editing: false,
         maquina: {},
@@ -339,9 +340,11 @@
           await this.getAllData(url)
           if (this.datos.length > 0) {
             this.auth = true
+            this.user = this.datos[0].nombre
           } else {
             this.auth = false
           }
+          this.datos = []
         }
       }
     })
