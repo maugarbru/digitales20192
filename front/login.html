@@ -333,7 +333,7 @@
         },
 
         async getUser() {
-          var url = 'login?id=' + this.username + "&password=" + this.password
+          var url = 'loginUser?id=' + this.username + "&password=" + this.password
           await this.getAllData(url)
           if (this.datos.length > 0) {
             return true
