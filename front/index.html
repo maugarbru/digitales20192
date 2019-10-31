@@ -124,6 +124,7 @@
         maquinaEscogida: "",
         periodos: ['Día', 'Período', 'Mes'],
         maquinas: [],
+        items: [],
         maquinasNombres: [],
         headers: [],
       },
@@ -162,6 +163,7 @@
           } else {
             this.dialog = true;
             this.datos = [];
+            this.items = [];
             if (this.periodos[0] == this.periodoEscogido) {
               this.getDia();
             } else if (this.periodos[1] == this.periodoEscogido) {
@@ -209,6 +211,7 @@
           }
 
           this.datos = response.data;
+          this.items = response.data;
           this.ponerUnidades()
           this.show = true;
           self.loading = false;
@@ -217,7 +220,7 @@
         },
 
         ponerUnidades() {
-          this.datos.forEach(element => {
+          this.items.forEach(element => {
             element.consumo = element.consumo + " kW/h"
           });
         },
