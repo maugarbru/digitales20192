@@ -153,8 +153,9 @@
               }
             }
           });
-          
+          this.ponerUnidades()   
         },
+        
         comprobar() {
           if (this.periodoEscogido == '' || this.maquinaEscogida == '') {
             alert("Escoger máquina y tiempo")
@@ -212,7 +213,6 @@
 
           this.datos = response.data;
           this.items = response.data;
-          this.ponerUnidades()
           this.show = true;
           self.loading = false;
           return response
