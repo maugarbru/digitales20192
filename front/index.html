@@ -135,7 +135,7 @@
             data: {
               labels: this.labels,
               datasets: [{
-                label: "Consumos kW/h",
+                label: "Consumo en kW/h",
                 data: this.consumos,
                 borderWidth: 1,
                 borderColor: "red",
@@ -209,10 +209,17 @@
           }
 
           this.datos = response.data;
+          this.ponerUnidades()
           this.show = true;
           self.loading = false;
           return response
 
+        },
+
+        ponerUnidades() {
+          this.datos.forEach(element => {
+            element.consumo = element.consumo + " kW/h"
+          });
         },
         /**
           * trae los datos por dia
