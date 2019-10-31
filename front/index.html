@@ -30,14 +30,17 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
+
         <v-container>
           <v-card class="mx-auto" max-width="450" tile>
+            <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
             <v-card-title>Reportes de consumo</v-card-title>
-            <br>
             <v-card-text>
               <v-form>
-                <v-select v-model="maquinaEscogida" :items="maquinasNombres" label="Máquina" color="red" outlined></v-select>
-                <v-select v-model="periodoEscogido" :items="periodos" label="Tiempo" color="red" outlined></v-select>
+                <v-select :disabled="loading" v-model="maquinaEscogida" :items="maquinasNombres" label="Máquina"
+                  color="red" outlined>
+                </v-select>
+                <v-select :disabled="loading" v-model="periodoEscogido" :items="periodos" label="Tiempo" color="red" outlined></v-select>
                 <center v-if="periodoEscogido == 'Día'">
                   <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
                 </center>
@@ -67,18 +70,19 @@
                 </v-btn>
                 <v-toolbar-title>Consulta</v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-toolbar-title>
+                  <label>{{maquinaEscogida}} --</label>
+                  <label v-if="periodoEscogido == 'Día'">{{dia}}</label>
+                  <label v-if="periodoEscogido == 'Mes'">{{mes}}</label>
+                  <label v-if="periodoEscogido == 'Semana'">{{semana}}</label>
+                </v-toolbar-title>
+                <v-spacer></v-spacer>
                 <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
                 </v-progress-circular>
                 <v-btn dark text v-if="!loading" @click="dialog = false">OK</v-btn>
               </v-toolbar>
               <br>
               <v-card-text>
-                <p>Máquina: {{maquinaEscogida}}</p>
-                <p v-if="periodoEscogido == 'Día'">Día escogido: {{dia}}</p>
-                <p v-if="periodoEscogido == 'Mes'">Mes escogido: {{mes}}</p>
-                <p v-if="periodoEscogido == 'Semana'">Periodo escogido: {{semana}}</p>
-
-                <br />
                 <h3 class="pb-2">Tabla de consumo</h3>
                 <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
                   :loading="loading">
@@ -153,9 +157,9 @@
               }
             }
           });
-          this.ponerUnidades()   
+          this.ponerUnidades()
         },
-        
+
         comprobar() {
           if (this.periodoEscogido == '' || this.maquinaEscogida == '') {
             alert("Escoger máquina y tiempo")
@@ -230,7 +234,7 @@
         async getDia() {
           var uid_maquina = this.getMaquina()
           console.log(uid_maquina);
-          
+
           var url = "filtroDia?fecha=" + this.dia + "&uid=" + uid_maquina
           this.headers = [
             { text: 'Consumo', value: 'consumo' },
