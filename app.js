@@ -92,6 +92,7 @@ app.post('/autenticar?', (req, res) => {
 	let query = `select id,password from usuarios where id = '${params.id}' and password = '${params.password}'`
 	client.query(query, function (err, result) {
 		console.log(result)
+		console.log(query)
 		if (err) {
 			console.log(err);
 			res.status(400).send(err);
