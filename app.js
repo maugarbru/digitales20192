@@ -136,6 +136,8 @@ app.post("/insertRegistro", function (req, res) {
 	client.query(query, function (err, result) {
 		if (err) {
 			console.log(err);
+
+
 			res.status(400).send(err);
 		}
 		res.status(200).send("Se han agregado los datos satisfactoriamente");
@@ -152,7 +154,8 @@ app.get("/filtroFecha?", function (req, res) {
     where uid_maquina = ${params.uid} and to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
     group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11)`
     client.query(query, function (err, result) {
-        if (err) {
+       console.log(result)
+	 if (err) {
             console.log(err);
             res.status(400).send(err);
         }
