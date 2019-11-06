@@ -1,6 +1,8 @@
 
 const cors = require("cors")
 var express = require("express")
+const fs = require("fs")
+var json2xls = require('json2xls');
 var path = require("path")
 var bodyParser = require("body-parser");
 var { Client } = require('pg')
@@ -8,7 +10,7 @@ var connectionString = 'postgres://equipo1:digitales123@localhost:5432/equipo1'
 var client = new Client({
     connectionString: connectionString
 });
-client.connect();
+// client.connect();
 var app = express();
 app.use(cors())
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -39,7 +41,9 @@ app.get("/datos/", async function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result.rows);
+        var xls = json2xls(result.rows);
+        fs.writeFileSync('data.xlsx', xls, 'binary')
+        res.sendFile(path.join(__dirname + "/data.xlsx"))
     });
 });
 /**
