@@ -89,7 +89,7 @@ app.post('/autenticar?', (req, res) => {
 	var params = req.query
 	console.log(params.contraseña);
 
-	let query = `select id,password from usuarios where id = '${params.id}' and password = '${params.password}'`
+	let query = `select id,password from usuarios where id = '${params.usuario}' and password = '${params.contraseña}'`
 	client.query(query, function (err, result) {
 		console.log(result)
 		console.log(query)
