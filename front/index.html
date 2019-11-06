@@ -40,7 +40,8 @@
                 <v-select :disabled="loading" v-model="maquinaEscogida" :items="maquinasNombres" label="Máquina"
                   color="red" outlined>
                 </v-select>
-                <v-select :disabled="loading" v-model="periodoEscogido" :items="periodos" label="Tiempo" color="red" outlined></v-select>
+                <v-select :disabled="loading" v-model="periodoEscogido" :items="periodos" label="Tiempo" color="red"
+                  outlined></v-select>
                 <center v-if="periodoEscogido == 'Día'">
                   <v-date-picker v-model="dia" color="red" locale="es" :max="diaHoy"></v-date-picker>
                 </center>
@@ -79,7 +80,9 @@
                 <v-spacer></v-spacer>
                 <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
                 </v-progress-circular>
-                <v-btn dark text v-if="!loading" @click="dialog = false">OK</v-btn>
+                <v-btn dark v-if="!loading" @click="exportarExcel()">EXPORTAR A EXCEL <v-icon>mdi-file-excel
+                  </v-icon>
+                </v-btn>
               </v-toolbar>
               <br>
               <v-card-text>
@@ -131,6 +134,7 @@
         items: [],
         maquinasNombres: [],
         headers: [],
+        peticion: ""
       },
       methods: {
         graph() {
@@ -241,6 +245,7 @@
             { text: 'Hora Inicio', value: 'hora_inicio' },
             { text: 'Hora Final', value: 'hora_fin' },
           ]
+          this.peticion = url
           await this.getAllData(url)
           this.getConsumos()
           this.getLabels('this.labels.push(element.hora_fin.slice(11, 16))')
@@ -252,6 +257,7 @@
           this.semana.sort()
           var uid_maquina = this.getMaquina()
           var url = `filtroFecha?fecha_inicio=${this.semana[0]}&fecha_fin=${this.semana[1]}&uid=${uid_maquina}`
+          this.peticion = url
           await this.getAllData(url)
           this.headers = [
             { text: 'Dia', value: 'fecha' },
@@ -266,6 +272,7 @@
         async getMes() {
           var uid_maquina = this.getMaquina()
           var url = `filtroFecha?fecha_inicio=${this.mes}-01&fecha_fin=${this.mes}-31&uid=${uid_maquina}`
+          this.peticion = url
           await this.getAllData(url)
           this.headers = [
             { text: 'Dia', value: 'fecha' },
@@ -274,6 +281,11 @@
           this.getConsumos()
           this.getLabels('this.labels.push(element.fecha)')
           this.graph()
+        },
+
+        async exportarExcel() {
+          var url = this.peticion + "&download=true"
+          await this.getAllData(url)
         },
 
         /**
