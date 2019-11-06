@@ -1,6 +1,8 @@
 
 const cors = require("cors")
 var express = require("express")
+const fs = require("fs")
+var json2xls = require('json2xls');
 var path = require("path")
 var bodyParser = require("body-parser");
 var jwt = require('jsonwebtoken')
@@ -114,13 +116,15 @@ app.post('/autenticar?', (req, res) => {
  * uri con las opciones de traer todos los registros
  */
 app.get("/datos/", async function (req, res) {
-	client.query('SELECT * FROM registros', function (err, result) {
-		if (err) {
-			console.log(err);
-			res.status(400).send(err);
-		}
-		res.status(200).send(result.rows);
-	});
+    client.query('SELECT * FROM registros', function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        var xls = json2xls(result.rows);
+        fs.writeFileSync('data.xlsx', xls, 'binary')
+        res.sendFile(path.join(__dirname + "/data.xlsx"))
+    });
 });
 /**
  * uri que tiene la posibilidad de enviar los datos
@@ -147,13 +151,19 @@ app.get("/filtroFecha?", rutasProtegidas, function (req, res) {
 	let query = `select substring(hora_inicio from 0 for 11) as fecha, round(sum(consumo),2) as consumo  from registros
     where uid_maquina = ${params.uid} and to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
     group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11)`
-	client.query(query, function (err, result) {
-		if (err) {
-			console.log(err);
-			res.status(400).send(err);
-		}
-		res.status(200).send(result.rows);
-	});
+    client.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        if (params.download == 'true') {
+            var xls = json2xls(result.rows);
+            fs.writeFileSync('data.xlsx', xls, 'binary')
+            res.sendFile(path.join(__dirname + "/data.xlsx"))
+        } else {
+            res.status(200).send(result.rows)
+        }
+    });
 });
 /**
  * query para filtro por fechas de los reportes
@@ -164,13 +174,19 @@ app.get("/filtroDia?", rutasProtegidas, function (req, res) {
 	let params = req.query
 	let query = `select  * from registros 
     where uid_maquina = ${params.uid} and hora_inicio like '${params.fecha}%' order by hora_fin`
-	client.query(query, function (err, result) {
-		if (err) {
-			console.log(err);
-			res.status(400).send(err);
-		}
-		res.status(200).send(result.rows);
-	});
+    client.query(query, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        if (params.download == 'true') {
+            var xls = json2xls(result.rows);
+            fs.writeFileSync('data.xlsx', xls, 'binary')
+            res.sendFile(path.join(__dirname + "/data.xlsx"))
+        } else {
+            res.status(200).send(result.rows)
+        }
+    });
 });
 
 /**
@@ -233,7 +249,6 @@ app.delete("/maquinas", function (req, res) {
 		res.status(200).send("Se ha eliminado la maquina correctamente");
 	});
 });
-
 
 
 port = 8080
