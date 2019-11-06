@@ -52,98 +52,6 @@
               </v-card-actions>
             </v-card>
           </v-layout>
-          <v-container v-if="logged">
-            <v-card>
-              <v-container>
-                <v-toolbar color="white" fixed flat>
-                  <v-toolbar-title>Gestionar máquinas - Usuario: {{user}}</v-toolbar-title>
-
-                  <div class="flex-grow-1"></div>
-                  <!-- v-if="$vuetify.breakpoint.smAndUp" -->
-                  <v-btn outlined @click="dialog = true; editing = false">
-                    Añadir máquina
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-
-                </v-toolbar>
-                <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
-                  :loading="loading">
-                  <template v-slot:item.action="{ item }">
-                    <v-btn icon @click="editDialog(item)">
-                      <v-icon color="orange">mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-btn icon @click="deleteDialog(item)">
-                      <v-icon color="red">mdi-delete</v-icon>
-                    </v-btn>
-                  </template>
-                </v-data-table>
-              </v-container>
-            </v-card>
-
-            <v-dialog v-model="dialog" max-width="600" transition="dialog-bottom-transition">
-              <v-card>
-                <v-toolbar dark color="red">
-                  <v-btn icon dark @click="dialog = false; maquina = {}; color = 'red'">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title v-if="!editing">Nuevo registro de máquina</v-toolbar-title>
-                  <v-toolbar-title v-else>Editar registro de máquina</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
-                  </v-progress-circular>
-                </v-toolbar>
-                <br>
-                <v-card-text>
-                  <v-text-field label="Código" type="text" v-model="maquina.codigo"></v-text-field>
-                  <v-text-field label="Nombre" type="text" v-model="maquina.nombre"></v-text-field>
-                  <v-text-field label="Ubicación" type="text" v-model="maquina.ubicacion"></v-text-field>
-                  <v-textarea label="Descripción" type="text" v-model="maquina.descripcion"></v-textarea>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn outlined small @click="dialog = false; maquina = {}; color = 'red'">
-                    <v-icon left small>mdi-cancel</v-icon>Cancelar
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn color="green" dark v-if="!editing" @click="verificar()">
-                    <v-icon left dark>mdi-plus</v-icon>Guardar
-                  </v-btn>
-                  <v-btn color="orange" dark v-else @click="verificar()">
-                    <v-icon left dark>mdi-check</v-icon>Editar
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-            <v-dialog v-model="dialogDelete" max-width="400" persistent transition="dialog-bottom-transition">
-              <v-card>
-                <v-toolbar dark color="red">
-                  <v-btn icon dark @click="dialogDelete = false; maquina = {}">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title>Confirmar eliminación</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
-                  </v-progress-circular>
-                </v-toolbar>
-                <br>
-                <v-card-text>
-                  <h3>Código: {{maquina.codigo}}</h3>
-                  <h3>Nombre: {{maquina.nombre}}</h3>
-                  <h3>Ubicación: {{maquina.ubicacion}}</h3>
-                  <h3>Descripción: {{maquina.descripcion}}</h3>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn outlined small @click="dialogDelete = false; maquina = {}">
-                    <v-icon left small>mdi-cancel</v-icon>Cancelar
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn color="red" dark @click="deleteMaquina(maquina)">
-                    <v-icon left dark>mdi-delete</v-icon>Eliminar
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-container>
           <v-snackbar v-model="snackbar" :timeout="3500" :color="snackcolor">
             <center>
               <strong>{{ snackbartext }}</strong>
@@ -174,179 +82,28 @@
         auth: false,
         user: '',
         loading: false,
-        editing: false,
-        maquina: {},
-        headers: [
-          { text: 'ID', value: 'uid' },
-          { text: 'Código', value: 'codigo' },
-          { text: 'Nombre', value: 'nombre' },
-          { text: 'Ubicación', value: 'ubicacion', sorteable: false },
-          { text: 'Descripción', value: 'descripcion', sorteable: false },
-          { text: 'Acciones', value: 'action', sorteable: false },
-        ],
-        datos: [],
       },
       methods: {
         //   metodo de login
         async login() {
-          await this.getUser()
           this.loading = true
-          if (this.auth) {
-            this.logged = true
-            this.getMaquinas()
-          } else {
-            this.logged = false
-            alert('Acceso denegado')
-            this.loading = false
-          }
-        },
-
-        editDialog(item) {
-          console.log("Edit", item);
-          this.dialog = true
-          this.color = 'orange'
-          this.maquina = item
-          this.editing = true
-        },
-
-        deleteDialog(item) {
-          console.log("Delete", item);
-          this.color = 'red'
-          this.maquina = item
-          this.dialogDelete = true
-        },
-
-        verificar() {
-          if (this.maquina.codigo == '' || this.maquina.codigo == null || this.maquina.nombre == '' || this.maquina.nombre == null) {
-            alert('El código y el nombre de la máquina es obligatorio')
-          } else {
-            if (this.editing) {
-              this.editMaquina(this.maquina)
-            } else {
-              this.saveMaquina(this.maquina)
-            }
-          }
-        },
-
-        async saveMaquina(maquina) {
-          this.loading = true
-          var url = 'maquinas'
-          try {
-            uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.post(uri, maquina, { timeout: 4000 })
-          } catch (error) {
-            try {
-              uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.post(uri, maquina, { timeout: 4000 })
-            } catch (error) {
-              alert("Error de conexión. Intente más tarde");
-            }
-          }
-          if (response) {
-            this.snackbar = true
-            this.snackbartext = 'Máquina añadida correctamente!'
-            this.dialog = false
-            this.maquina = {}
-            this.snackcolor = 'green'
-            this.getMaquinas()
-          }
-          this.loading = false
-        },
-
-        async editMaquina(maquina) {
-          this.loading = true
-          var url = 'maquinas'
+          var url = `autenticar?usuario=${this.username}&&contraseña=${this.password}`
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
             response = await axios.put(uri, maquina, { timeout: 4000 })
+            console.log(response);
           } catch (error) {
-            try {
+            try {              
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               response = await axios.put(uri, maquina, { timeout: 4000 })
+              console.log(response);
+              
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
           }
-          if (response) {
-            this.snackbar = true
-            this.snackbartext = 'Máquina editada correctamente!'
-            this.dialog = false
-            this.maquina = {}
-            this.editing = false
-            this.snackcolor = 'orange'
-            this.getMaquinas()
-          }
-          this.loading = false
-        },
-
-        async deleteMaquina(maquina) {
-          this.loading = true
-          var url = 'maquinas?uid=' + maquina.uid
-          try {
-            uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.delete(uri, { timeout: 4000 })
-          } catch (error) {
-            try {
-              uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.delete(uri, { timeout: 4000 })
-            } catch (error) {
-              alert("Error de conexión. Intente más tarde");
-            }
-          }
-          if (response) {
-            this.snackbar = true
-            this.snackbartext = 'Máquina eliminada correctamente!'
-            this.dialogDelete = false
-            this.maquina = {}
-            this.snackcolor = 'red'
-            this.getMaquinas()
-          }
-          this.loading = false
-        },
-
-        /**
-         * metodo que hace las consultas hacia el servidor
-         */
-        async getAllData(url) {
-          this.loading = true
-          var self = this
-          var response = {}
-          var uri = ""
-          try {
-            uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.get(uri, { timeout: 4000 })
-          } catch (error) {
-            try {
-              uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.get(uri, { timeout: 4000 })
-            } catch (error) {
-              alert("Error de conexión. Intente más tarde");
-            }
-          }
-          this.datos = response.data;
-          this.show = true;
-          self.loading = false;
-          return response
-        },
-
-        async getMaquinas() {
-          var url = 'maquinas'
-          await this.getAllData(url)
-        },
-
-        async getUser() {
-          var url = 'loginUser?id=' + this.username + "&password=" + this.password
-          await this.getAllData(url)
-          if (this.datos.length > 0) {
-            this.auth = true
-            this.user = this.datos[0].nombre
-          } else {
-            this.auth = false
-          }
-          this.datos = []
         }
       }
-    })
   </script>
   <style>
     #app {
