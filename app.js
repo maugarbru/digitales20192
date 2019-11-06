@@ -91,6 +91,7 @@ app.post('/autenticar?', (req, res) => {
 
 	let query = `select id,password from usuarios where id = '${params.id}' and password = '${params.password}'`
 	client.query(query, function (err, result) {
+		console.log(result)
 		if (err) {
 			console.log(err);
 			res.status(400).send(err);
@@ -154,7 +155,6 @@ app.get("/filtroFecha?", function (req, res) {
     where uid_maquina = ${params.uid} and to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
     group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11)`
     client.query(query, function (err, result) {
-       console.log(result)
 	 if (err) {
             console.log(err);
             res.status(400).send(err);
