@@ -146,7 +146,7 @@ app.post("/insertRegistro", function (req, res) {
  *  params:
  * - recibe como parametro dos fechas especificas que son fecha_inicio  y fecha_fin
  */
-app.get("/filtroFecha?", rutasProtegidas, function (req, res) {
+app.get("/filtroFecha?", function (req, res) {
 	let params = req.query
 	let query = `select substring(hora_inicio from 0 for 11) as fecha, round(sum(consumo),2) as consumo  from registros
     where uid_maquina = ${params.uid} and to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
@@ -170,7 +170,7 @@ app.get("/filtroFecha?", rutasProtegidas, function (req, res) {
  *  params:
  * - recibe como parametro una fechas especificas que es fecha 
  */
-app.get("/filtroDia?", rutasProtegidas, function (req, res) {
+app.get("/filtroDia?", function (req, res) {
 	let params = req.query
 	let query = `select  * from registros 
     where uid_maquina = ${params.uid} and hora_inicio like '${params.fecha}%' order by hora_fin`
@@ -192,7 +192,7 @@ app.get("/filtroDia?", rutasProtegidas, function (req, res) {
 /**
  * query para obtener las maquinas
  */
-app.get("/maquinas", rutasProtegidas, function (req, res) {
+app.get("/maquinas", function (req, res) {
 	let query = `select  * from maquinas`
 	client.query(query, function (err, result) {
 		if (err) {

@@ -93,17 +93,18 @@
             response = await axios.put(uri, maquina, { timeout: 4000 })
             console.log(response);
           } catch (error) {
-            try {              
+            try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               response = await axios.put(uri, maquina, { timeout: 4000 })
               console.log(response);
-              
+
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
           }
         }
       }
+    })
   </script>
   <style>
     #app {
