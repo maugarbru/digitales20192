@@ -78,7 +78,13 @@ app.get("/filtroFecha?", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result.rows);
+        if (params.download == 'true') {
+            var xls = json2xls(result.rows);
+            fs.writeFileSync('data.xlsx', xls, 'binary')
+            res.sendFile(path.join(__dirname + "/data.xlsx"))
+        } else {
+            res.status(200).send(result.rows)
+        }
     });
 });
 /**
@@ -95,7 +101,13 @@ app.get("/filtroDia?", function (req, res) {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).send(result.rows);
+        if (params.download == 'true') {
+            var xls = json2xls(result.rows);
+            fs.writeFileSync('data.xlsx', xls, 'binary')
+            res.sendFile(path.join(__dirname + "/data.xlsx"))
+        } else {
+            res.status(200).send(result.rows)
+        }
     });
 });
 
@@ -174,7 +186,6 @@ app.get("/loginUser", function (req, res) {
         res.status(200).send(result.rows);
     });
 });
-
 
 port = 8080
 app.listen(port, () => {
