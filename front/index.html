@@ -269,7 +269,7 @@
         //metodo que trae los datos por mes  
         async getMes() {
           var uid_maquina = this.getMaquina()
-          var url = `filtroFecha?fecha_inicio=${this.mes}-01&fecha_fin=${this.mes}-31&uid=${uid_maquina}`
+          var url = `filtroMes?mes=${this.mes}`
           await this.getAllData(url)
           this.headers = [
             { text: 'Dia', value: 'fecha' },

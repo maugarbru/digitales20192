@@ -194,6 +194,32 @@ app.get("/filtroDia?", function (req, res) {
 });
 
 /**
+ * query para filtro por mes de los reportes
+ *  params:
+ * - recibe como parametro el mes con formato "AAAA-MM"
+ */
+app.get("/filtroMes?", function (req, res) {
+	let params = req.query
+	let query = `select substring(hora_inicio from 0 for 11) as fecha, round(sum(consumo),2) as consumo  from registros
+    where uid_maquina = ${params.uid} and (hora_inicio like '${params.mes}%')
+    group by  substring(hora_inicio from 0 for 11) order by substring(hora_inicio from 0 for 11)`
+    client.query(query, function (err, result) {
+       console.log(result)
+	 if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        if (params.download == 'true') {
+            var xls = json2xls(result.rows);
+            fs.writeFileSync('data.xlsx', xls, 'binary')
+            res.sendFile(path.join(__dirname + "/data.xlsx"))
+        } else {
+            res.status(200).send(result.rows)
+        }
+    });
+});
+
+/**
  * query para obtener las maquinas
  */
 app.get("/maquinas", function (req, res) {
