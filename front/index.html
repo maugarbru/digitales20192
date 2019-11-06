@@ -80,7 +80,7 @@
                 <v-spacer></v-spacer>
                 <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
                 </v-progress-circular>
-                <v-btn dark v-if="!loading" @click="exportarExcel()">EXPORTAR A EXCEL <v-icon>mdi-file-excel
+                <v-btn dark v-if="!loading" :href="peticion + '&download=true'">EXPORTAR A EXCEL<v-icon>mdi-file-excel
                   </v-icon>
                 </v-btn>
               </v-toolbar>
@@ -209,10 +209,12 @@
           var uri = ""
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            this.peticion = uri
             response = await axios.get(uri, { timeout: 4000 })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              this.peticion = uri
               response = await axios.get(uri, { timeout: 4000 })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
@@ -237,15 +239,12 @@
           */
         async getDia() {
           var uid_maquina = this.getMaquina()
-          console.log(uid_maquina);
-
           var url = "filtroDia?fecha=" + this.dia + "&uid=" + uid_maquina
           this.headers = [
             { text: 'Consumo', value: 'consumo' },
             { text: 'Hora Inicio', value: 'hora_inicio' },
             { text: 'Hora Final', value: 'hora_fin' },
           ]
-          this.peticion = url
           await this.getAllData(url)
           this.getConsumos()
           this.getLabels('this.labels.push(element.hora_fin.slice(11, 16))')
@@ -257,7 +256,6 @@
           this.semana.sort()
           var uid_maquina = this.getMaquina()
           var url = `filtroFecha?fecha_inicio=${this.semana[0]}&fecha_fin=${this.semana[1]}&uid=${uid_maquina}`
-          this.peticion = url
           await this.getAllData(url)
           this.headers = [
             { text: 'Dia', value: 'fecha' },
@@ -272,7 +270,6 @@
         async getMes() {
           var uid_maquina = this.getMaquina()
           var url = `filtroFecha?fecha_inicio=${this.mes}-01&fecha_fin=${this.mes}-31&uid=${uid_maquina}`
-          this.peticion = url
           await this.getAllData(url)
           this.headers = [
             { text: 'Dia', value: 'fecha' },
@@ -285,7 +282,18 @@
 
         async exportarExcel() {
           var url = this.peticion + "&download=true"
-          await this.getAllData(url)
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+
+            response = await axios.get(uri, { timeout: 4000 })
+          } catch (error) {
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = await axios.get(uri, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
         },
 
         /**
