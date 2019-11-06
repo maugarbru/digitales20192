@@ -93,11 +93,12 @@ app.post('/autenticar?', (req, res) => {
 	client.query(query, function (err, result) {
 		console.log(result)
 		console.log(query)
+		var user = result[0]
 		if (err) {
 			console.log(err);
 			res.status(400).send(err);
 		}
-		if (params.usuario === result.rows.id && params.contraseña === result.rows.password) {
+		if (params.usuario === user.id && params.contraseña === user.password) {
 			const payload = {
 				check: true
 			};
