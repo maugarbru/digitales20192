@@ -71,6 +71,9 @@
     const app = new Vue({
       el: '#app',
       vuetify: new Vuetify(),
+      beforeMount(){
+
+      }, 
       // VueCookies:new vueCookies(),
       data: {
         base: "/",
@@ -88,6 +91,7 @@
         loading: false,
       },
       methods: {
+
         /**
          * va a la siguiente pagina
          * */
@@ -95,7 +99,7 @@
           var a = document.createElement("a");
           document.body.appendChild(a);
           a.style = "display: none";
-          a.href = "../GestorMaquinas";
+          a.href = "../";
 
           a.click();
         },
@@ -117,8 +121,6 @@
               this.loading = false
             }
           } catch (error) {
-            console.log(error);
-
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               response = await axios.post(uri, { timeout: 4000 })
