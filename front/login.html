@@ -71,6 +71,7 @@
       vuetify: new Vuetify(),
       data: {
         base: "/",
+        // base: "/equipo1-nodejs",
         dialog: false,
         dialogDelete: false,
         snackbar: false,
@@ -84,6 +85,18 @@
         loading: false,
       },
       methods: {
+        /**
+         * va a la siguiente pagina
+         * */
+        nextPage() {
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+          url = window.URL.createObjectURL(blob);
+          a.href = this.base + "/GestorMaquinas";
+          a.download = name;
+          a.click();
+        },
         //   metodo de login
         async login() {
           this.loading = true
@@ -91,13 +104,22 @@
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
             response = await axios.put(uri, maquina, { timeout: 4000 })
-            console.log(response);
+            if (response.success) {
+              this.nextPage()
+            } else {
+              console.log("el usuario no existe");
+
+            }
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               response = await axios.put(uri, maquina, { timeout: 4000 })
-              console.log(response);
+              if (response.success) {
+                this.nextPage()
+              } else {
+                console.log("el usuario no existe");
 
+              }
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }

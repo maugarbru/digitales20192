@@ -107,10 +107,11 @@ app.post('/autenticar?', (req, res) => {
 			});
 			res.json({
 				mensaje: 'Autenticación correcta',
-				token: token
+				token: token,
+				success:true
 			});
 		} else {
-			res.json({ mensaje: "Usuario o contraseña incorrectos" })
+			res.json({ mensaje: "Usuario o contraseña incorrectos",success:false })
 		}
 	});
 
