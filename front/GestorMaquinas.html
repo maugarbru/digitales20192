@@ -37,7 +37,7 @@
               <v-card>
                 <v-container>
                   <v-toolbar color="white" fixed flat>
-                    <v-toolbar-title>Gestionar máquinas - Usuario: {{user}}</v-toolbar-title>
+                    <v-toolbar-title>Gestionar máquinas - Usuario: [{{user}}]</v-toolbar-title>
                     <div class="flex-grow-1"></div>
                     <!-- v-if="$vuetify.breakpoint.smAndUp" -->
                     <v-btn outlined @click="dialog = true; editing = false">
@@ -175,13 +175,14 @@
                     <v-text-field label="Código" type="text" v-model="user.id"></v-text-field>
                     <v-text-field label="Nombre" type="text" v-model="user.nombre"></v-text-field>
                     <v-text-field label="Teléfono" type="text" v-model="user.telefono"></v-text-field>
+                    <v-text-field label="Contraseña" type="password" v-model="user.password"></v-text-field>
                   </v-card-text>
                   <v-card-actions>
                     <v-btn outlined small @click="dialogUser = false; user = {}; color = 'red'">
                       <v-icon left small>mdi-cancel</v-icon>Cancelar
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="green" dark @click="verificar()">
+                    <v-btn color="green" dark @click="verificarUser()">
                       <v-icon left dark>mdi-plus</v-icon>Guardar
                     </v-btn>
                   </v-card-actions>
@@ -201,7 +202,7 @@
                   </v-toolbar>
                   <br>
                   <v-card-text>
-                    <h3>Código: {{user.codigo}}</h3>
+                    <h3>Código: {{user.id}}</h3>
                     <h3>Nombre: {{user.nombre}}</h3>
                     <h3>Teléfono: {{user.telefono}}</h3>
                   </v-card-text>
@@ -264,7 +265,14 @@
         maquinas: [],
         users: [],
       },
+      beforeMount() {
+        this.getLoggedUser()
+      },
       methods: {
+        getLoggedUser() {
+
+        },
+
         editDialog(item) {
           console.log("Edit", item);
           this.dialog = true
@@ -299,6 +307,14 @@
           }
         },
 
+        verificarUser() {
+          if (this.user.id == '' || this.user.nombre == '' || this.user.telefono == '' || this.user.password == '') {
+            alert('Llenar todos los campos')
+          } else {
+              this.saveUser(this.user)
+          }
+        },
+
         async saveMaquina(maquina) {
           this.loading = true
           var url = 'maquinas'
@@ -320,6 +336,31 @@
             this.maquina = {}
             this.snackcolor = 'green'
             this.getMaquinas()
+          }
+          this.loading = false
+        },
+
+        async saveUser(user) {
+          this.loading = true
+          var url = 'usuarios'
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.post(uri, user, { timeout: 4000 })
+          } catch (error) {
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = await axios.post(uri, user, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
+          if (response) {
+            this.snackbar = true
+            this.snackbartext = 'Usuario añadido correctamente!'
+            this.dialogUser = false
+            this.user = {}
+            this.snackcolor = 'green'
+            this.getUsers()
           }
           this.loading = false
         },
@@ -371,6 +412,31 @@
             this.maquina = {}
             this.snackcolor = 'red'
             this.getMaquinas()
+          }
+          this.loading = false
+        },
+
+        async deleteUser(user) {
+          this.loading = true
+          var url = 'usuarios?id=' + user.id
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.delete(uri, { timeout: 4000 })
+          } catch (error) {
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              response = await axios.delete(uri, { timeout: 4000 })
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
+          if (response) {
+            this.snackbar = true
+            this.snackbartext = 'Usuario eliminado correctamente!'
+            this.dialogDeleteUser = false
+            this.user = {}
+            this.snackcolor = 'red'
+            this.getUsers()
           }
           this.loading = false
         },
