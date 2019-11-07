@@ -72,7 +72,7 @@
                 <v-toolbar-title>Consulta</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-title>
-                  <label>{{maquinaEscogida}} --</label>
+                  <label>{{maquinaEscogida}} -</label>
                   <label v-if="periodoEscogido == 'Día'">{{dia}}</label>
                   <label v-if="periodoEscogido == 'Mes'">{{mes}}</label>
                   <label v-if="periodoEscogido == 'Semana'">{{semana}}</label>
@@ -80,11 +80,13 @@
                 <v-spacer></v-spacer>
                 <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
                 </v-progress-circular>
+              </v-toolbar>
+              <br>
+              <center>
                 <v-btn dark v-if="!loading" :href="peticion + '&download=true'">EXPORTAR A EXCEL<v-icon>mdi-file-excel
                   </v-icon>
                 </v-btn>
-              </v-toolbar>
-              <br>
+              </center>
               <v-card-text>
                 <h3 class="pb-2">Tabla de consumo</h3>
                 <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
@@ -259,6 +261,10 @@
           }
 
           this.datos = response.data;
+          if (datos.length < 0) {
+            alert("No existen datos para estos parámetros")
+            this.dialog = false
+          }
           this.items = response.data;
           this.show = true;
           self.loading = false;
