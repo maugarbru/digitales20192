@@ -281,6 +281,51 @@ app.delete("/maquinas", function (req, res) {
   });
 });
 
+/**
+ * query para obtener las usuarios
+ */
+app.get("/usuarios", function (req, res) {
+  let query = `select id, nombre, telefono from usuarios`
+  client.query(query, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+    res.status(200).send(result.rows);
+  });
+});
+
+/**
+ * query para insert los usuarios
+ */
+app.post("/usuarios", function (req, res) {
+  let body = req.body
+  let query = `insert into usuarios (id, nombre, telefono, password) values ('${body.id}', '${body.nombre}', '${body.telefono}', '${body.password}')`
+  console.log(query);
+  client.query(query, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+    res.status(200).send("Se ha agregado la maquina correctamente");
+  });
+});
+
+/**
+ * query para delete los usuarios
+ */
+app.delete("/usuarios", function (req, res) {
+  let params = req.query
+  let query = `delete from usuarios where id = ${params.id} `
+  client.query(query, function (err, result) {
+    if (err) {
+      console.log(err);
+      res.status(400).send(err);
+    }
+    res.status(200).send("Se ha eliminado la maquina correctamente");
+  });
+});
+
 
 port = 8080
 app.listen(port, () => {
