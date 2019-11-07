@@ -113,7 +113,7 @@
       vuetify: new Vuetify(),
       beforeMount() {
         this.getMaquinas()
-        // this.valid()
+        this.valid()
       },
       data: {
         dialog: false,
@@ -169,7 +169,7 @@
           var a = document.createElement("a");
           document.body.appendChild(a);
           a.style = "display: none";
-          a.href = "../login";
+          a.href = ".." + this.base + "/login";
           a.click();
         },
         // verificacion
