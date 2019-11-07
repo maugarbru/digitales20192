@@ -76,8 +76,8 @@
       }, 
       // VueCookies:new vueCookies(),
       data: {
-        base: "/",
-        // base: "/equipo1-nodejs",
+        // base: "/",
+        base: "/equipo1-nodejs",
         dialog: false,
         dialogDelete: false,
         snackbar: false,
@@ -99,7 +99,7 @@
           var a = document.createElement("a");
           document.body.appendChild(a);
           a.style = "display: none";
-          a.href = "../";
+          a.href = ".."+ this.base;
 
           a.click();
         },
