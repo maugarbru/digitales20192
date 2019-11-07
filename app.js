@@ -316,7 +316,7 @@ app.post("/usuarios", function (req, res) {
  */
 app.delete("/usuarios", function (req, res) {
   let params = req.query
-  let query = `delete from usuarios where id = ${params.id} `
+  let query = `delete from usuarios where id = '${params.id}' `
   client.query(query, function (err, result) {
     if (err) {
       console.log(err);

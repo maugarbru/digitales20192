@@ -37,7 +37,7 @@
               <v-card>
                 <v-container>
                   <v-toolbar color="white" fixed flat>
-                    <v-toolbar-title>Gestionar máquinas - Usuario: [{{user}}]</v-toolbar-title>
+                    <v-toolbar-title>Gestionar máquinas</v-toolbar-title>
                     <div class="flex-grow-1"></div>
                     <!-- v-if="$vuetify.breakpoint.smAndUp" -->
                     <v-btn outlined @click="dialog = true; editing = false">
@@ -45,7 +45,7 @@
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </v-toolbar>
-                  <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
+                  <v-data-table :headers="headers" :items="maquinas" :items-per-page="5" class="elevation-1"
                     :loading="loading">
                     <template v-slot:item.action="{ item }">
                       <v-btn icon @click="editDialog(item)">
@@ -207,7 +207,7 @@
                     <h3>Teléfono: {{user.telefono}}</h3>
                   </v-card-text>
                   <v-card-actions>
-                    <v-btn outlined small @click="dialogDelete = false; user = {}">
+                    <v-btn outlined small @click="dialogDeleteUser = false; user = {}">
                       <v-icon left small>mdi-cancel</v-icon>Cancelar
                     </v-btn>
                     <v-spacer></v-spacer>
