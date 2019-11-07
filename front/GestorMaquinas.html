@@ -33,192 +33,190 @@
         </v-toolbar>
         <v-container>
           <v-layout align-center justify-center v-if="!logged">
-          <v-container >
-            <v-card>
-              <v-container>
-                <v-toolbar color="white" fixed flat>
-                  <v-toolbar-title>Gestionar máquinas - Usuario: {{user}}</v-toolbar-title>
-
-                  <div class="flex-grow-1"></div>
-                  <!-- v-if="$vuetify.breakpoint.smAndUp" -->
-                  <v-btn outlined @click="dialog = true; editing = false">
-                    Añadir máquina
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-
-                </v-toolbar>
-                <v-data-table :headers="headers" :items="maquinas" :items-per-page="5" class="elevation-1"
-                  :loading="loading">
-                  <template v-slot:item.action="{ item }">
-                    <v-btn icon @click="editDialog(item)">
-                      <v-icon color="orange">mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-btn icon @click="deleteDialog(item)">
-                      <v-icon color="red">mdi-delete</v-icon>
-                    </v-btn>
-                  </template>
-                </v-data-table>
-              </v-container>
-            </v-card>
-
-            <v-dialog v-model="dialog" max-width="600" transition="dialog-bottom-transition">
+            <v-container>
               <v-card>
-                <v-toolbar dark color="red">
-                  <v-btn icon dark @click="dialog = false; maquina = {}; color = 'red'">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title v-if="!editing">Nuevo registro de máquina</v-toolbar-title>
-                  <v-toolbar-title v-else>Editar registro de máquina</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
-                  </v-progress-circular>
-                </v-toolbar>
-                <br>
-                <v-card-text>
-                  <v-text-field label="Código" type="text" v-model="maquina.codigo"></v-text-field>
-                  <v-text-field label="Nombre" type="text" v-model="maquina.nombre"></v-text-field>
-                  <v-text-field label="Ubicación" type="text" v-model="maquina.ubicacion"></v-text-field>
-                  <v-textarea label="Descripción" type="text" v-model="maquina.descripcion"></v-textarea>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn outlined small @click="dialog = false; maquina = {}; color = 'red'">
-                    <v-icon left small>mdi-cancel</v-icon>Cancelar
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn color="green" dark v-if="!editing" @click="verificar()">
-                    <v-icon left dark>mdi-plus</v-icon>Guardar
-                  </v-btn>
-                  <v-btn color="orange" dark v-else @click="verificar()">
-                    <v-icon left dark>mdi-check</v-icon>Editar
-                  </v-btn>
-                </v-card-actions>
+                <v-container>
+                  <v-toolbar color="white" fixed flat>
+                    <v-toolbar-title>Gestionar máquinas - Usuario: {{user}}</v-toolbar-title>
+                    <div class="flex-grow-1"></div>
+                    <!-- v-if="$vuetify.breakpoint.smAndUp" -->
+                    <v-btn outlined @click="dialog = true; editing = false">
+                      Añadir máquina
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                  </v-toolbar>
+                  <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
+                    :loading="loading">
+                    <template v-slot:item.action="{ item }">
+                      <v-btn icon @click="editDialog(item)">
+                        <v-icon color="orange">mdi-pencil</v-icon>
+                      </v-btn>
+                      <v-btn icon @click="deleteDialog(item)">
+                        <v-icon color="red">mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-data-table>
+                </v-container>
               </v-card>
-            </v-dialog>
 
-            <v-dialog v-model="dialogDelete" max-width="400" persistent transition="dialog-bottom-transition">
-              <v-card>
-                <v-toolbar dark color="red">
-                  <v-btn icon dark @click="dialogDelete = false; maquina = {}">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title>Confirmar eliminación</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
-                  </v-progress-circular>
-                </v-toolbar>
-                <br>
-                <v-card-text>
-                  <h3>Código: {{maquina.codigo}}</h3>
-                  <h3>Nombre: {{maquina.nombre}}</h3>
-                  <h3>Ubicación: {{maquina.ubicacion}}</h3>
-                  <h3>Descripción: {{maquina.descripcion}}</h3>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn outlined small @click="dialogDelete = false; maquina = {}">
-                    <v-icon left small>mdi-cancel</v-icon>Cancelar
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn color="red" dark @click="deleteMaquina(maquina)">
-                    <v-icon left dark>mdi-delete</v-icon>Eliminar
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-container>
-          <v-snackbar v-model="snackbar" :timeout="3500" :color="snackcolor">
-            <center>
-              <strong>{{ snackbartext }}</strong>
-            </center>
-          </v-snackbar>
+              <v-dialog v-model="dialog" max-width="600" transition="dialog-bottom-transition">
+                <v-card>
+                  <v-toolbar dark color="red">
+                    <v-btn icon dark @click="dialog = false; maquina = {}; color = 'red'">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title v-if="!editing">Nuevo registro de máquina</v-toolbar-title>
+                    <v-toolbar-title v-else>Editar registro de máquina</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
+                    </v-progress-circular>
+                  </v-toolbar>
+                  <br>
+                  <v-card-text>
+                    <v-text-field label="Código" type="text" v-model="maquina.codigo"></v-text-field>
+                    <v-text-field label="Nombre" type="text" v-model="maquina.nombre"></v-text-field>
+                    <v-text-field label="Ubicación" type="text" v-model="maquina.ubicacion"></v-text-field>
+                    <v-textarea label="Descripción" type="text" v-model="maquina.descripcion"></v-textarea>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn outlined small @click="dialog = false; maquina = {}; color = 'red'">
+                      <v-icon left small>mdi-cancel</v-icon>Cancelar
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green" dark v-if="!editing" @click="verificar()">
+                      <v-icon left dark>mdi-plus</v-icon>Guardar
+                    </v-btn>
+                    <v-btn color="orange" dark v-else @click="verificar()">
+                      <v-icon left dark>mdi-check</v-icon>Editar
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog v-model="dialogDelete" max-width="400" persistent transition="dialog-bottom-transition">
+                <v-card>
+                  <v-toolbar dark color="red">
+                    <v-btn icon dark @click="dialogDelete = false; maquina = {}">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Confirmar eliminación</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
+                    </v-progress-circular>
+                  </v-toolbar>
+                  <br>
+                  <v-card-text>
+                    <h3>Código: {{maquina.codigo}}</h3>
+                    <h3>Nombre: {{maquina.nombre}}</h3>
+                    <h3>Ubicación: {{maquina.ubicacion}}</h3>
+                    <h3>Descripción: {{maquina.descripcion}}</h3>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn outlined small @click="dialogDelete = false; maquina = {}">
+                      <v-icon left small>mdi-cancel</v-icon>Cancelar
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red" dark @click="deleteMaquina(maquina)">
+                      <v-icon left dark>mdi-delete</v-icon>Eliminar
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-container>
+            <v-snackbar v-model="snackbar" :timeout="3500" :color="snackcolor">
+              <center>
+                <strong>{{ snackbartext }}</strong>
+              </center>
+            </v-snackbar>
         </v-container>
 
 
         <!-- USUARIOs -->
         <v-container>
           <v-layout align-center justify-center v-if="!logged">
-          <v-container >
-            <v-card>
-              <v-container>
-                <v-toolbar color="white" fixed flat>
-                  <v-toolbar-title>Gestionar Usuarios</v-toolbar-title>
+            <v-container>
+              <v-card>
+                <v-container>
+                  <v-toolbar color="white" fixed flat>
+                    <v-toolbar-title>Gestionar Usuarios</v-toolbar-title>
 
-                  <div class="flex-grow-1"></div>
-                  <!-- v-if="$vuetify.breakpoint.smAndUp" -->
-                  <v-btn outlined @click="dialogUser = true">
-                    Añadir usuario
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-
-                </v-toolbar>
-                <v-data-table :headers="headersUser" :items="users" :items-per-page="5" class="elevation-1"
-                  :loading="loading">
-                  <template v-slot:item.action="{ item }">
-                    <v-btn icon @click="deleteDialogUser(item)">
-                      <v-icon color="red">mdi-delete</v-icon>
+                    <div class="flex-grow-1"></div>
+                    <!-- v-if="$vuetify.breakpoint.smAndUp" -->
+                    <v-btn outlined @click="dialogUser = true">
+                      Añadir usuario
+                      <v-icon>mdi-plus</v-icon>
                     </v-btn>
-                  </template>
-                </v-data-table>
-              </v-container>
-            </v-card>
 
-            <v-dialog v-model="dialogUser" max-width="600" transition="dialog-bottom-transition">
-              <v-card>
-                <v-toolbar dark color="red">
-                  <v-btn icon dark @click="dialogUser = false; user = {}; color = 'red'">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title>Nuevo registro de usuario</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
-                  </v-progress-circular>
-                </v-toolbar>
-                <br>
-                <v-card-text>
-                  <v-text-field label="Código" type="text" v-model="user.id"></v-text-field>
-                  <v-text-field label="Nombre" type="text" v-model="user.nombre"></v-text-field>
-                  <v-text-field label="Teléfono" type="text" v-model="user.telefono"></v-text-field>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn outlined small @click="dialogUser = false; user = {}; color = 'red'">
-                    <v-icon left small>mdi-cancel</v-icon>Cancelar
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn color="green" dark @click="verificar()">
-                    <v-icon left dark>mdi-plus</v-icon>Guardar
-                  </v-btn>
-                </v-card-actions>
+                  </v-toolbar>
+                  <v-data-table :headers="headersUser" :items="users" :items-per-page="5" class="elevation-1"
+                    :loading="loading">
+                    <template v-slot:item.action="{ item }">
+                      <v-btn icon @click="deleteDialogUser(item)">
+                        <v-icon color="red">mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-data-table>
+                </v-container>
               </v-card>
-            </v-dialog>
 
-            <v-dialog v-model="dialogDeleteUser" max-width="400" persistent transition="dialog-bottom-transition">
-              <v-card>
-                <v-toolbar dark color="red">
-                  <v-btn icon dark @click="dialogDeleteUser = false; user = {}">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title>Confirmar eliminación</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
-                  </v-progress-circular>
-                </v-toolbar>
-                <br>
-                <v-card-text>
-                  <h3>Código: {{user.codigo}}</h3>
-                  <h3>Nombre: {{user.nombre}}</h3>
-                  <h3>Teléfono: {{user.telefono}}</h3>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn outlined small @click="dialogDelete = false; user = {}">
-                    <v-icon left small>mdi-cancel</v-icon>Cancelar
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn color="red" dark @click="deleteUser(user)">
-                    <v-icon left dark>mdi-delete</v-icon>Eliminar
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-container>
+              <v-dialog v-model="dialogUser" max-width="600" transition="dialog-bottom-transition">
+                <v-card>
+                  <v-toolbar dark color="red">
+                    <v-btn icon dark @click="dialogUser = false; user = {}; color = 'red'">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Nuevo registro de usuario</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
+                    </v-progress-circular>
+                  </v-toolbar>
+                  <br>
+                  <v-card-text>
+                    <v-text-field label="Código" type="text" v-model="user.id"></v-text-field>
+                    <v-text-field label="Nombre" type="text" v-model="user.nombre"></v-text-field>
+                    <v-text-field label="Teléfono" type="text" v-model="user.telefono"></v-text-field>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn outlined small @click="dialogUser = false; user = {}; color = 'red'">
+                      <v-icon left small>mdi-cancel</v-icon>Cancelar
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green" dark @click="verificar()">
+                      <v-icon left dark>mdi-plus</v-icon>Guardar
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog v-model="dialogDeleteUser" max-width="400" persistent transition="dialog-bottom-transition">
+                <v-card>
+                  <v-toolbar dark color="red">
+                    <v-btn icon dark @click="dialogDeleteUser = false; user = {}">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Confirmar eliminación</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
+                    </v-progress-circular>
+                  </v-toolbar>
+                  <br>
+                  <v-card-text>
+                    <h3>Código: {{user.codigo}}</h3>
+                    <h3>Nombre: {{user.nombre}}</h3>
+                    <h3>Teléfono: {{user.telefono}}</h3>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn outlined small @click="dialogDelete = false; user = {}">
+                      <v-icon left small>mdi-cancel</v-icon>Cancelar
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red" dark @click="deleteUser(user)">
+                      <v-icon left dark>mdi-delete</v-icon>Eliminar
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-container>
         </v-container>
       </v-content>
     </v-app>
@@ -267,20 +265,6 @@
         users: [],
       },
       methods: {
-        //   metodo de login
-        async login() {
-          await this.getUser()
-          this.loading = true
-          if (this.auth) {
-            this.logged = true
-            this.getMaquinas()
-          } else {
-            this.logged = false
-            alert('Acceso denegado')
-            this.loading = false
-          }
-        },
-
         editDialog(item) {
           console.log("Edit", item);
           this.dialog = true
