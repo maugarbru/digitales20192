@@ -65,7 +65,7 @@ app.get('/GestorMaquinas/', (req, res) => {
  * metodo de verificacion por paginas
  */
 app.post("/verificacion", (req, res) => {
-  const token = req.headers['access-token'];
+  const token = req.body['access-token'];
   if (token) {
     jwt.verify(token, app.get('llave'), (err, decoded) => {
       if (err) {

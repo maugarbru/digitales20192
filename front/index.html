@@ -180,10 +180,12 @@
           var url = "verificacion"
           var cookie = this.$cookies.get('token')
           try {
-            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            uri = "http://localhost:8080/equipo1-nodejs/" + url
             this.peticion = uri
             response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
-            console.log(response);
+            if (response.success != true) {
+              this.nextPage()
+            }
           } catch (error) {
             console.log(error);
 
@@ -191,7 +193,7 @@
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               // this.peticion = url
               response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
-              console.log(response);
+              this.nextPage()
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
