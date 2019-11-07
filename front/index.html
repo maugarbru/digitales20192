@@ -180,10 +180,10 @@
           var url = "verificacion"
           var cookie = this.$cookies.get('token')
           try {
-            uri = "http://localhost:8080/equipo1-nodejs/" + url
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
             this.peticion = uri
             response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
-            if (response.success != true) {
+            if (response.data.success != true) {
               this.nextPage()
             }
           } catch (error) {
