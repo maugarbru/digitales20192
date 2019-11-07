@@ -53,9 +53,10 @@
             </v-card>
           </v-layout>
           <v-snackbar v-model="snackbar" :timeout="3500" :color="snackcolor">
-            <center>
-              <strong>{{ snackbartext }}</strong>
-            </center>
+            {{snackbartext }}
+            <v-btn color="pink" text @click="snackbar = false">
+              cerrar
+            </v-btn>
           </v-snackbar>
         </v-container>
       </v-content>
@@ -65,10 +66,12 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue-cookies@1.5.12/vue-cookies.js"></script>
   <script>
     const app = new Vue({
       el: '#app',
       vuetify: new Vuetify(),
+      // VueCookies:new vueCookies(),
       data: {
         base: "/",
         // base: "/equipo1-nodejs",
@@ -92,9 +95,8 @@
           var a = document.createElement("a");
           document.body.appendChild(a);
           a.style = "display: none";
-          url = window.URL.createObjectURL(blob);
-          a.href = this.base + "/GestorMaquinas";
-          a.download = name;
+          a.href = "../GestorMaquinas";
+
           a.click();
         },
         //   metodo de login
@@ -102,23 +104,31 @@
           this.loading = true
           var url = `autenticar?usuario=${this.username}&&contraseña=${this.password}`
           try {
-            uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.put(uri, maquina, { timeout: 4000 })
-            if (response.success) {
+            var uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            response = await axios.post(uri, { timeout: 4000 })
+            console.log(response);
+
+            if (response.data.success == true) {
+              this.$cookies.set('token', response.data.token)
               this.nextPage()
             } else {
-              console.log("el usuario no existe");
-
+              this.snackbartext = "Usuario o contraseña incorrectas"
+              this.snackbar = true
+              this.loading = false
             }
           } catch (error) {
+            console.log(error);
+
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.put(uri, maquina, { timeout: 4000 })
-              if (response.success) {
+              response = await axios.post(uri, { timeout: 4000 })
+              if (response.data.success == true) {
+                this.$cookies.set('token', response.data.token)
                 this.nextPage()
               } else {
-                console.log("el usuario no existe");
-
+                this.snackbartext = "Usuario o contraseña incorrectas"
+                this.snackbar = true
+                this.loading = false
               }
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
