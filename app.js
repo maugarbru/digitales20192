@@ -144,7 +144,7 @@ app.get("/datos/", async function (req, res) {
 /**
  * uri que tiene la posibilidad de enviar los datos
  */
-app.post("/insertRegistro", rutasProtegidas, function (req, res) {
+app.post("/insertRegistro", function (req, res) {
   let body = req.body
   let query = `insert  into  registros (uid_maquina,consumo,hora_inicio,hora_fin)  
     values (${body.uid_maquina},${body.consumo},'${body.hora_inicio}', '${body.hora_fin}')`
