@@ -36,22 +36,22 @@ rutasProtegidas.use((req, res, next) => {
     next();
   }
   // if (token) {
-    jwt.verify(token, app.get('llave'), (err, decoded) => {
-      if (err) {
-        jwt.verify(tokenQuery, app.get('llave'), (err, decoded) => {
-          if (err) {
-            return res.json({ mensaje: 'Token inválida' });
-          } else {
-            req.decoded = decoded;
-            next();
-          }
-        });
-        // return res.json({ mensaje: 'Token inválida' });
-      } else {
-        req.decoded = decoded;
-        next();
-      }
-    });
+  jwt.verify(token, app.get('llave'), (err, decoded) => {
+    if (err) {
+      jwt.verify(tokenQuery, app.get('llave'), (err, decoded) => {
+        if (err) {
+          return res.json({ mensaje: 'Token inválida' });
+        } else {
+          req.decoded = decoded;
+          next();
+        }
+      });
+      // return res.json({ mensaje: 'Token inválida' });
+    } else {
+      req.decoded = decoded;
+      next();
+    }
+  });
 
   // } else {
   //   res.send({
@@ -144,7 +144,7 @@ app.get("/datos/", async function (req, res) {
 /**
  * uri que tiene la posibilidad de enviar los datos
  */
-app.post("/insertRegistro", function (req, res) {
+app.post("/insertRegistro", rutasProtegidas, function (req, res) {
   let body = req.body
   let query = `insert  into  registros (uid_maquina,consumo,hora_inicio,hora_fin)  
     values (${body.uid_maquina},${body.consumo},'${body.hora_inicio}', '${body.hora_fin}')`
@@ -163,7 +163,7 @@ app.post("/insertRegistro", function (req, res) {
  *  params:
  * - recibe como parametro dos fechas especificas que son fecha_inicio  y fecha_fin
  */
-app.get("/filtroFecha?", function (req, res) {
+app.get("/filtroFecha?", rutasProtegidas, function (req, res) {
   let params = req.query
   let query = `select substring(hora_inicio from 0 for 11) as fecha, round(sum(consumo),2) as consumo  from registros
     where uid_maquina = ${params.uid} and to_timestamp(hora_inicio,'YYYY-MM-DD') between '${params.fecha_inicio}'  and  '${params.fecha_fin}'
@@ -211,7 +211,7 @@ app.get("/filtroDia?", rutasProtegidas, function (req, res) {
  *  params:
  * - recibe como parametro el mes con formato "AAAA-MM"
  */
-app.get("/filtroMes?", function (req, res) {
+app.get("/filtroMes?", rutasProtegidas, function (req, res) {
   let params = req.query
   let query = `select substring(hora_inicio from 0 for 11) as fecha, round(sum(consumo),2) as consumo  from registros
     where uid_maquina = ${params.uid} and (hora_inicio like '${params.mes}%')
@@ -235,7 +235,7 @@ app.get("/filtroMes?", function (req, res) {
 /**
  * query para obtener las maquinas
  */
-app.get("/maquinas", function (req, res) {
+app.get("/maquinas", rutasProtegidas, function (req, res) {
   let query = `select  * from maquinas`
   client.query(query, function (err, result) {
     if (err) {
@@ -249,7 +249,7 @@ app.get("/maquinas", function (req, res) {
 /**
  * query para insert las maquinas
  */
-app.post("/maquinas", function (req, res) {
+app.post("/maquinas", rutasProtegidas, function (req, res) {
   let body = req.body
   let query = `insert into maquinas (codigo, nombre, ubicacion, descripcion) values ('${body.codigo}', '${body.nombre}', '${body.ubicacion}', '${body.descripcion}')`
   console.log(query);
@@ -265,7 +265,7 @@ app.post("/maquinas", function (req, res) {
 /**
  * query para update las maquinas
  */
-app.put("/maquinas", function (req, res) {
+app.put("/maquinas", rutasProtegidas, function (req, res) {
   let body = req.body
   let query = `update maquinas set codigo = '${body.codigo}', nombre = '${body.nombre}', ubicacion = '${body.ubicacion}', descripcion = '${body.descripcion}' where uid = ${body.uid}`
   console.log(query);
@@ -281,7 +281,7 @@ app.put("/maquinas", function (req, res) {
 /**
  * query para delete las maquinas
  */
-app.delete("/maquinas", function (req, res) {
+app.delete("/maquinas", rutasProtegidas, function (req, res) {
   let params = req.query
   let query = `delete from maquinas where uid = ${params.uid} `
   client.query(query, function (err, result) {
@@ -296,7 +296,7 @@ app.delete("/maquinas", function (req, res) {
 /**
  * query para obtener las usuarios
  */
-app.get("/usuarios", function (req, res) {
+app.get("/usuarios", rutasProtegidas, function (req, res) {
   let query = `select id, nombre, telefono from usuarios`
   client.query(query, function (err, result) {
     if (err) {
@@ -310,7 +310,7 @@ app.get("/usuarios", function (req, res) {
 /**
  * query para insert los usuarios
  */
-app.post("/usuarios", function (req, res) {
+app.post("/usuarios", rutasProtegidas, function (req, res) {
   let body = req.body
   let query = `insert into usuarios (id, nombre, telefono, password) values ('${body.id}', '${body.nombre}', '${body.telefono}', '${body.password}')`
   console.log(query);
@@ -326,7 +326,7 @@ app.post("/usuarios", function (req, res) {
 /**
  * query para delete los usuarios
  */
-app.delete("/usuarios", function (req, res) {
+app.delete("/usuarios", rutasProtegidas, function (req, res) {
   let params = req.query
   let query = `delete from usuarios where id = '${params.id}' `
   client.query(query, function (err, result) {

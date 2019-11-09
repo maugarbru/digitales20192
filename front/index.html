@@ -187,7 +187,7 @@
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
             this.peticion = uri
-            response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
+            response = await axios.post(uri, { "access-token": cookie })
             if (response.data.success != true) {
               this.nextPage()
             }
@@ -197,7 +197,7 @@
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               // this.peticion = url
-              response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
+              response = await axios.post(uri, { "access-token": cookie })
               if (response.data.success != true) {
                 this.nextPage()
               }

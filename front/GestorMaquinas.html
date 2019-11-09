@@ -231,8 +231,9 @@
       el: '#app',
       vuetify: new Vuetify(),
       data: {
-        base: "/",
-        // base: "/equipo1-nodejs",
+        token: '',
+        // base: "/",
+        base: "/equipo1-nodejs",
         dialog: false,
         dialogDelete: false,
         dialogUser: false,
@@ -269,6 +270,7 @@
       beforeMount() {
         this.getLoggedUser()
         this.valid()
+        this.token = this.$cookies.get('token')
       },
       methods: {
         nextPage() {
@@ -288,7 +290,7 @@
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
             this.peticion = uri
-            response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
+            response = await axios.post(uri, { "access-token": cookie })
             if (response.data.success != true) {
               this.nextPage()
             }
@@ -298,7 +300,7 @@
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               // this.peticion = url
-              response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
+              response = await axios.post(uri, { "access-token": cookie })
               if (response.data.success != true) {
                 this.nextPage()
               }
@@ -359,11 +361,11 @@
           var url = 'maquinas'
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.post(uri, maquina, { timeout: 4000 })
+            response = await axios.post(uri, maquina, { headers: { timeout: 4000, "access-token": this.token } })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.post(uri, maquina, { timeout: 4000 })
+              response = await axios.post(uri, maquina, { headers: { timeout: 4000, "access-token": this.token } })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
@@ -384,11 +386,11 @@
           var url = 'usuarios'
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.post(uri, user, { timeout: 4000 })
+            response = await axios.post(uri, user, { headers: { timeout: 4000, "access-token": this.token } })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.post(uri, user, { timeout: 4000 })
+              response = await axios.post(uri, user, { headers: { timeout: 4000, "access-token": this.token } })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
@@ -409,11 +411,11 @@
           var url = 'maquinas'
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.put(uri, maquina, { timeout: 4000 })
+            response = await axios.put(uri, maquina, { headers: { timeout: 4000, "access-token": this.token } })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.put(uri, maquina, { timeout: 4000 })
+              response = await axios.put(uri, maquina, { headers: { timeout: 4000, "access-token": this.token } })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
@@ -435,11 +437,11 @@
           var url = 'maquinas?uid=' + maquina.uid
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.delete(uri, { timeout: 4000 })
+            response = await axios.delete(uri, { headers: { timeout: 4000, "access-token": this.token } })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.delete(uri, { timeout: 4000 })
+              response = await axios.delete(uri, { headers: { timeout: 4000, "access-token": this.token } })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
@@ -460,11 +462,11 @@
           var url = 'usuarios?id=' + user.id
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.delete(uri, { timeout: 4000 })
+            response = await axios.delete(uri, { headers: { timeout: 4000, "access-token": this.token } })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.delete(uri, { timeout: 4000 })
+              response = await axios.delete(uri, { headers: { timeout: 4000, "access-token": this.token } })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
@@ -490,11 +492,11 @@
           var uri = ""
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
-            response = await axios.get(uri, { timeout: 4000 })
+            response = await axios.get(uri, { headers: { timeout: 4000, "access-token": this.token } })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
-              response = await axios.get(uri, { timeout: 4000 })
+              response = await axios.get(uri, { headers: { timeout: 4000, "access-token": this.token } })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
