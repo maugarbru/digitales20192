@@ -29,18 +29,28 @@ app.use(
 
 rutasProtegidas.use((req, res, next) => {
   const token = req.headers['access-token'];
+  const tokenQuery = req.query["access-token "]
   if (exceptionToken.filter(item => item == token).length > 0) {
     next();
   }
   if (token) {
     jwt.verify(token, app.get('llave'), (err, decoded) => {
       if (err) {
-        return res.json({ mensaje: 'Token inválida' });
+        jwt.verify(tokenQuery, app.get('llave'), (err, decoded) => {
+          if (err) {
+            return res.json({ mensaje: 'Token inválida' });
+          } else {
+            req.decoded = decoded;
+            next();
+          }
+        });
+        // return res.json({ mensaje: 'Token inválida' });
       } else {
         req.decoded = decoded;
         next();
       }
     });
+
   } else {
     res.send({
       mensaje: 'Token no proveída.'
@@ -175,7 +185,7 @@ app.get("/filtroFecha?", function (req, res) {
  *  params:
  * - recibe como parametro una fechas especificas que es fecha 
  */
-app.get("/filtroDia?", function (req, res) {
+app.get("/filtroDia?", rutasProtegidas, function (req, res) {
   let params = req.query
   let query = `select  * from registros 
     where uid_maquina = ${params.uid} and hora_inicio like '${params.fecha}%' order by hora_fin`

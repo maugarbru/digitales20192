@@ -232,6 +232,7 @@
       vuetify: new Vuetify(),
       data: {
         base: "/",
+        // base: "/equipo1-nodejs",
         dialog: false,
         dialogDelete: false,
         dialogUser: false,
@@ -267,8 +268,45 @@
       },
       beforeMount() {
         this.getLoggedUser()
+        this.valid()
       },
       methods: {
+        nextPage() {
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+          a.href = ".." + this.base + "login";
+          a.click();
+        },
+        // verificacion
+        async  valid() {
+          this.loading = true
+          var self = this
+          var response = {}
+          var url = "verificacion"
+          var cookie = this.$cookies.get('token')
+          try {
+            uri = "http://167.249.40.70/equipo1-nodejs/" + url
+            this.peticion = uri
+            response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
+            if (response.data.success != true) {
+              this.nextPage()
+            }
+          } catch (error) {
+            console.log(error);
+
+            try {
+              uri = "http://172.60.2.149/equipo1-nodejs/" + url
+              // this.peticion = url
+              response = await axios.post(uri, { timeout: 4000, "access-token": cookie })
+              if (response.data.success != true) {
+                this.nextPage()
+              }
+            } catch (error) {
+              alert("Error de conexión. Intente más tarde");
+            }
+          }
+        },
         getLoggedUser() {
           this.getUsers()
           this.getMaquinas()
@@ -312,7 +350,7 @@
           if (this.user.id == '' || this.user.nombre == '' || this.user.telefono == '' || this.user.password == '') {
             alert('Llenar todos los campos')
           } else {
-              this.saveUser(this.user)
+            this.saveUser(this.user)
           }
         },
 

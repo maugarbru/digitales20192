@@ -19,8 +19,7 @@
         <v-toolbar color="red" fixed>
           <v-toolbar-title class="white--text">Máquinas UdeM</v-toolbar-title>
 
-          <div class="flex-grow-1"></div>
-          <!-- v-if="$vuetify.breakpoint.smAndUp" -->
+          <!-- <div class="flex-grow-1"></div>
           <v-toolbar-items>
             <v-btn href="/equipo1-nodejs/" depressed text>
               <v-icon>mdi-arrow-left</v-icon>
@@ -29,7 +28,7 @@
             <v-btn icon :href="base+'about'">
               <v-icon>mdi-information-variant</v-icon>
             </v-btn>
-          </v-toolbar-items>
+          </v-toolbar-items> -->
         </v-toolbar>
         <v-container>
           <v-layout align-center justify-center v-if="!logged">
@@ -76,8 +75,8 @@
       }, 
       // VueCookies:new vueCookies(),
       data: {
-        // base: "/",
-        base: "/equipo1-nodejs",
+        base: "/",
+        // base: "/equipo1-nodejs",
         dialog: false,
         dialogDelete: false,
         snackbar: false,

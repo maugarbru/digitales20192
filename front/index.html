@@ -83,7 +83,8 @@
               </v-toolbar>
               <br>
               <center>
-                <v-btn dark v-if="!loading" :href="peticion + '&download=true'">EXPORTAR A EXCEL<v-icon>mdi-file-excel
+                <v-btn dark v-if="!loading" :href="peticion + '&download=true&access-token=' + token">EXPORTAR A EXCEL
+                  <v-icon>mdi-file-excel
                   </v-icon>
                 </v-btn>
               </center>
@@ -114,11 +115,13 @@
       el: '#app',
       vuetify: new Vuetify(),
       beforeMount() {
-        this.getMaquinas()
         this.valid()
+        this.getMaquinas()
+        this.token = this.$cookies.get('token')
       },
       data: {
         dialog: false,
+        token: '',
         base: "/equipo1-nodejs/",  // base de la url en el servidor
         // base: "/", // base de la url localmente
         loading: false,
