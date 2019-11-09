@@ -13,7 +13,7 @@ var client = new Client({
   connectionString: connectionString
 });
 const rutasProtegidas = express.Router();
-// client.connect();
+client.connect();
 var app = express();
 app.set("llave", "digitales123")
 app.use(cors())
