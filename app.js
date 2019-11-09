@@ -13,7 +13,7 @@ var client = new Client({
   connectionString: connectionString
 });
 const rutasProtegidas = express.Router();
-client.connect();
+// client.connect();
 var app = express();
 app.set("llave", "digitales123")
 app.use(cors())
@@ -29,11 +29,13 @@ app.use(
 
 rutasProtegidas.use((req, res, next) => {
   const token = req.headers['access-token'];
-  const tokenQuery = req.query["access-token "]
+  const tokenQuery = req.query["access-token"]
+  console.log(tokenQuery);
+
   if (exceptionToken.filter(item => item == token).length > 0) {
     next();
   }
-  if (token) {
+  // if (token) {
     jwt.verify(token, app.get('llave'), (err, decoded) => {
       if (err) {
         jwt.verify(tokenQuery, app.get('llave'), (err, decoded) => {
@@ -51,11 +53,11 @@ rutasProtegidas.use((req, res, next) => {
       }
     });
 
-  } else {
-    res.send({
-      mensaje: 'Token no proveída.'
-    });
-  }
+  // } else {
+  //   res.send({
+  //     mensaje: 'Token no proveída.'
+  //   });
+  // }
 });
 
 

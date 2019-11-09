@@ -252,12 +252,12 @@
           try {
             uri = "http://167.249.40.70/equipo1-nodejs/" + url
             this.peticion = uri
-            response = await axios.get(uri, { timeout: 4000 })
+            response = await axios.get(uri, { headers: { timeout: 4000, "access-token": this.token } })
           } catch (error) {
             try {
               uri = "http://172.60.2.149/equipo1-nodejs/" + url
               this.peticion = uri
-              response = await axios.get(uri, { timeout: 4000 })
+              response = await axios.get(uri, { timeout: 4000, "access-token": this.token })
             } catch (error) {
               alert("Error de conexión. Intente más tarde");
             }
