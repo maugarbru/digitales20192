@@ -268,9 +268,9 @@
         users: [],
       },
       beforeMount() {
+        this.token = this.$cookies.get('token')
         this.getLoggedUser()
         this.valid()
-        this.token = this.$cookies.get('token')
       },
       methods: {
         nextPage() {

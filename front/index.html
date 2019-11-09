@@ -115,9 +115,9 @@
       el: '#app',
       vuetify: new Vuetify(),
       beforeMount() {
+        this.token = this.$cookies.get('token')
         this.valid()
         this.getMaquinas()
-        this.token = this.$cookies.get('token')
       },
       data: {
         dialog: false,
