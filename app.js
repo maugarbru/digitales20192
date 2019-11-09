@@ -62,13 +62,13 @@ rutasProtegidas.use((req, res, next) => {
 
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + "/front/index.html"))
+  res.sendFile(path.join(__dirname + "/front/login.html"))
 })
 app.get('/about/', (req, res) => {
   res.sendFile(path.join(__dirname + "/front/about.html"))
 })
-app.get('/login/', (req, res) => {
-  res.sendFile(path.join(__dirname + "/front/login.html"))
+app.get('/reportes/', (req, res) => {
+  res.sendFile(path.join(__dirname + "/front/index.html"))
 })
 app.get('/GestorMaquinas/', (req, res) => {
   res.sendFile(path.join(__dirname + "/front/GestorMaquinas.html"))
