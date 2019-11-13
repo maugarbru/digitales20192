@@ -31,8 +31,9 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        {{tab}}
+
         <v-container>
+          {{tab}}
           <v-tabs v-model="tab" background-color="grey lighten-3" color="red" grow>
             <v-tab>
               Maquinas
@@ -43,7 +44,7 @@
           </v-tabs>
 
           <v-tabs-items v-model="tab">
-            <v-tab-item key="0">
+            <v-tab-item :key=0>
               <v-layout align-center justify-center v-if="!logged">
                 <v-container>
                   <v-card>
@@ -143,7 +144,7 @@
         </v-container>
         </v-tab-item>
 
-        <v-tab-item key="1">
+        <v-tab-item :key=1>
           <!-- USUARIOs -->
           <v-container>
             <v-layout align-center justify-center v-if="!logged">
