@@ -42,7 +42,7 @@
           </v-tabs>
 
           <v-tabs-items v-model="tab">
-            <v-tab-item>
+            <v-tab-item value="0">
               <v-layout align-center justify-center v-if="!logged">
                 <v-container>
                   <v-card>
@@ -142,7 +142,7 @@
         </v-container>
         </v-tab-item>
 
-        <v-tab-item>
+        <v-tab-item value="1">
           <!-- USUARIOs -->
           <v-container>
             <v-layout align-center justify-center v-if="!logged">
