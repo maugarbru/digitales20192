@@ -79,21 +79,21 @@
                 <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
                 </v-progress-circular>
               </v-toolbar>
-              <hr/>
-              <center>
-                <v-btn dark v-if="!loading" :href="peticion + '&download=true&access-token=' + token">EXPORTAR A EXCEL
-                  <v-icon>mdi-file-excel
-                  </v-icon>
-                </v-btn>
-              </center>
-              <br/>
+              <hr />
               <v-card-text>
-                <h3 class="pb-2">Tabla de consumo</h3>
-                <v-data-table :headers="headers" :items="datos" mobile-breakpoint:="200" :items-per-page="5" class="elevation-1"
-                  :loading="loading">
-                </v-data-table>
                 <h3 class="py-2">Grafica de consumo</h3>
                 <canvas id="myChart"></canvas>
+                <center>
+                  <v-btn dark v-if="!loading" :href="peticion + '&download=true&access-token=' + token">EXPORTAR A EXCEL
+                    <v-icon>mdi-file-excel
+                    </v-icon>
+                  </v-btn>
+                </center>
+                <br />
+                <h3 class="pb-2">Tabla de consumo</h3>
+                <v-data-table :headers="headers" :items="datos" :mobile-breakpoint=200 :items-per-page="5"
+                  class="elevation-1" :loading="loading">
+                </v-data-table>
               </v-card-text>
             </v-card>
             <v-dialog>
