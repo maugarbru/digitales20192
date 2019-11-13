@@ -25,7 +25,7 @@
             <v-btn icon :href="base+'about'">
               <v-icon>mdi-information-variant</v-icon>
             </v-btn>
-            <v-btn icon :href="base+'login'">
+            <v-btn icon :href="base+'GestorMaquinas'">
               <v-icon>mdi-account-details</v-icon>
             </v-btn>
           </v-toolbar-items>
@@ -69,8 +69,6 @@
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Consulta</v-toolbar-title>
-                <v-spacer></v-spacer>
                 <v-toolbar-title>
                   <label>{{maquinaEscogida}} -</label>
                   <label v-if="periodoEscogido == 'Día'">{{dia}}</label>
@@ -81,16 +79,17 @@
                 <v-progress-circular v-if="loading" :width="3" indeterminate color="white">
                 </v-progress-circular>
               </v-toolbar>
-              <br>
+              <hr/>
               <center>
                 <v-btn dark v-if="!loading" :href="peticion + '&download=true&access-token=' + token">EXPORTAR A EXCEL
                   <v-icon>mdi-file-excel
                   </v-icon>
                 </v-btn>
               </center>
+              <br/>
               <v-card-text>
                 <h3 class="pb-2">Tabla de consumo</h3>
-                <v-data-table :headers="headers" :items="datos" :items-per-page="5" class="elevation-1"
+                <v-data-table :headers="headers" :items="datos" mobile-breakpoint:="200" :items-per-page="5" class="elevation-1"
                   :loading="loading">
                 </v-data-table>
                 <h3 class="py-2">Grafica de consumo</h3>
