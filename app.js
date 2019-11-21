@@ -146,13 +146,12 @@ app.get("/datos/", async function (req, res) {
  */
 app.post("/insertRegistro", function (req, res) {
   let body = req.body
+  let consumo = (body.consumo / 60)
   let query = `insert  into  registros (uid_maquina,consumo,hora_inicio,hora_fin)  
-    values (${body.uid_maquina},${body.consumo},'${body.hora_inicio}', '${body.hora_fin}')`
+    values (${body.uid_maquina},${consumo},'${body.hora_inicio}', '${body.hora_fin}')`
   client.query(query, function (err, result) {
     if (err) {
       console.log(err);
-
-
       res.status(400).send(err);
     }
     res.status(200).send("Se han agregado los datos satisfactoriamente");
