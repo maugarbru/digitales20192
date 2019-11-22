@@ -145,11 +145,10 @@
       },
       watch: {
         periodoEscogido: function (newValue, oldValue) {
-          console.log("NEW: " + newValue + " - OLD: " + oldValue)
           if (this.periodoTemporal == true) {
             setTimeout(() => {
               this.periodoEscogido = 'Período'
-            }, 2500)
+            }, 500)
           }
           if (oldValue == 'Mes' && newValue == 'Período') {
             this.periodoTemporal = true
