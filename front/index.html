@@ -268,7 +268,9 @@
             this.dialog = false
           } else {
             this.datos.forEach(element => {
-              element.consumo = (element.consumo).toFixed(2)
+              if (element.consumo) {
+                element.consumo = (element.consumo).toFixed(2)
+              }
             });
           }
           this.items = response.data;
