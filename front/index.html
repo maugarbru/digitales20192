@@ -47,7 +47,7 @@
                 </center>
                 <center v-if="periodoEscogido == 'Período'">
                   <h3>Escoger 2 días</h3>
-                  <v-date-picker v-model="semana" range color="red" locale="es" :max="diaHoy">
+                  <v-date-picker v-if="periodoEscogido == 'Período'" v-model="semana" range color="red" locale="es" :max="diaHoy">
                   </v-date-picker>
                 </center>
                 <center v-if="periodoEscogido == 'Mes'">
@@ -141,11 +141,6 @@
         maquinasNombres: [],
         headers: [],
         peticion: ""
-      },
-      watch: {
-        periodoEscogido() {
-          this.semana = []
-        }
       },
       methods: {
         graph() {
