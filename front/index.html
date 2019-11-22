@@ -82,7 +82,7 @@
               <hr />
               <v-card-text>
                 <h3 class="py-2">Grafica de consumo</h3>
-                <canvas id="myChart"></canvas>
+                <canvas id="myChart" v-if="dialog"></canvas>
                 <center>
                   <v-btn dark v-if="!loading" :href="peticion + '&download=true&access-token=' + token">EXPORTAR A EXCEL
                     <v-icon>mdi-file-excel
@@ -141,6 +141,11 @@
         maquinasNombres: [],
         headers: [],
         peticion: ""
+      },
+      watch: {
+        periodoEscogido() {
+          this.semana = []
+        }
       },
       methods: {
         graph() {
