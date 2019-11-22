@@ -263,11 +263,6 @@
           }
 
           this.datos = response.data;
-          this.datos.forEach(element => {
-            if (element.consumo) {
-              element.consumo = (element.consumo).toFixed(2)
-            }
-          });
           if (this.datos.length == 0) {
             alert("No existen datos para estos parámetros")
             this.dialog = false
@@ -280,7 +275,7 @@
 
         ponerUnidades() {
           this.items.forEach(element => {
-            element.consumo = element.consumo + " kW/h"
+            element.consumo = (element.consumo).toFixed(2) + " kW/h"
           });
         },
         /**
