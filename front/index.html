@@ -266,6 +266,10 @@
           if (this.datos.length == 0) {
             alert("No existen datos para estos parámetros")
             this.dialog = false
+          } else {
+            this.datos.forEach(element => {
+              element.consumo = (element.consumo).toFixed(2)
+            });
           }
           this.items = response.data;
           this.show = true;
