@@ -136,6 +136,7 @@
         periodoEscogido: "",
         maquinaEscogida: "",
         periodos: ['Día', 'Período', 'Mes'],
+        periodoTemporal: false,
         maquinas: [],
         items: [],
         maquinasNombres: [],
@@ -144,9 +145,15 @@
       },
       watch: {
         periodoEscogido: function (newValue, oldValue) {
-          console.log("Nuevo:" + newValue + " -Viejo:"+ oldValue)
+          console.log("NEW: " + newValue + " - OLD: " + oldValue)
+          if (this.periodoTemporal == true) {
+            this.periodoEscogido = 'Período'
+          }
           if (oldValue == 'Mes' && newValue == 'Período') {
+            this.periodoTemporal = true
             this.periodoEscogido = 'Día'
+          } else {
+            this.periodoTemporal = false
           }
         }
       },
