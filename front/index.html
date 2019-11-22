@@ -275,7 +275,7 @@
 
         ponerUnidades() {
           this.items.forEach(element => {
-            element.consumo = (element.consumo).toFixed(2) + " kW/h"
+            element.consumo = Math.round(element.consumo * 100) / 100 + " kW/h"
           });
         },
         /**
