@@ -47,7 +47,7 @@
                 </center>
                 <center v-if="periodoEscogido == 'Período'">
                   <h3>Escoger 2 días</h3>
-                  <v-date-picker v-model="semana" multiple color="red" locale="es" :max="diaHoy">
+                  <v-date-picker v-model="semana" range color="red" locale="es">
                   </v-date-picker>
                 </center>
                 <center v-if="periodoEscogido == 'Mes'">
