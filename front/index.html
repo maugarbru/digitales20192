@@ -144,12 +144,9 @@
       },
       watch: {
         periodoEscogido: function (newValue, oldValue) {
-          console.log(newValue, oldValue)
+          console.log("Nuevo:" + newValue + " -Viejo:"+ oldValue)
           if (oldValue == 'Mes' && newValue == 'Período') {
-            newValue = 'Día'
-            console.log(this.periodoEscogido)
-            newValue = 'Período'
-            console.log(this.periodoEscogido)
+            this.periodoEscogido = 'Día'
           }
         }
       },
